@@ -3,6 +3,7 @@ import {
   randomLongitude,
   randomLatitude,
   randomPosition,
+  randomPositions,
   randomPoint,
   randomLineString,
   randomPolygon,
@@ -40,6 +41,14 @@ describe('geo tools', () => {
     expect(randomPosition.name).to.be.equal('randomPosition');
     const position = randomPosition();
     expect(position).to.exist.and.have.length(2);
+  });
+
+  it('should generate random positions', () => {
+    expect(randomPositions).to.exist;
+    expect(randomPositions).to.be.a('function');
+    expect(randomPositions.name).to.be.equal('randomPositions');
+    const positions = randomPositions();
+    expect(positions).to.exist.and.have.length.at.least(2);
   });
 
   it('should generate random point', () => {

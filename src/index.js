@@ -103,6 +103,45 @@ export const randomPosition = (optns = {}) => {
 };
 
 /**
+ * @function randomPositions
+ * @name randomPositions
+ * @description Generate random positions
+ * @param {object} [optns={}] valid option
+ * @param {number} [optns.vertices=2] how many positions.
+ * @param {number[]} [optns.bbox=[-180, -90, 180, 90]] a bounding box inside
+ * of which geometries are placed.
+ * @returns {object} valid positions
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example const geo = randomPositions();
+ * // => [ [-76.41031, 67.0704], ...]
+ */
+export const randomPositions = (optns = { vertices: 2 }) => {
+  // refs
+  let coordinates = [];
+  let longitude;
+  let latitude;
+
+  // compute position for vertices
+  forEach(range(optns.vertices || 2), () => {
+    // random next position after last
+    const position = randomPosition(
+      mergeObjects(optns, { longitude, latitude })
+    );
+    [longitude, latitude] = position;
+    // collect position
+    coordinates = [...coordinates, position];
+  });
+
+  // return positions
+  return coordinates;
+};
+
+/**
  * @function randomPoint
  * @name randomPoint
  * @description Generate random GeoJSON Point
@@ -149,20 +188,7 @@ export const randomPoint = (optns = {}) => {
 export const randomLineString = (optns = { vertices: 2 }) => {
   // refs
   const type = GEO_LINESTRING;
-  let coordinates = [];
-  let longitude;
-  let latitude;
-
-  // compute position for vertices
-  forEach(range(optns.vertices || 2), () => {
-    // random next position after last
-    const position = randomPosition(
-      mergeObjects(optns, { longitude, latitude })
-    );
-    [longitude, latitude] = position;
-    // collect position
-    coordinates = [...coordinates, position];
-  });
+  const coordinates = randomPositions(optns);
 
   // return linestring
   return { type, coordinates };
