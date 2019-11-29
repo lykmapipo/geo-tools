@@ -44,7 +44,7 @@ readShapefile('data.shp', (error, { finished, feature, next }) => {
   } 
   // process features
   // and request next chunk from stream
-  process(error => next(error));
+  processFeature(error => next(error));
 });
 
 readGeoJSON('data.geojson', (error, { finished, feature, next }) => {
@@ -58,7 +58,7 @@ readGeoJSON('data.geojson', (error, { finished, feature, next }) => {
   } 
   // process features
   // and request next chunk from stream
-  process(error => next(error));
+  processFeature(error => next(error));
 });
 ```
 

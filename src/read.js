@@ -25,7 +25,7 @@ import { open as openShapefile } from 'shapefile';
  *  else if(finished){ ... }
  *
  *  // process feature
- *  // and read next
+ *  // and read next chunk
  *  else {
  *   //...
  *   return next();
@@ -90,7 +90,7 @@ export const readShapefile = (path, done) => {
  *  else if(finished){ ... }
  *
  *  // process feature
- *  // and read next
+ *  // and read next chunk
  *  else {
  *   //...
  *   return next();
