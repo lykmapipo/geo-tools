@@ -1,4 +1,4 @@
-import { forEach, range } from 'lodash';
+import { forEach, map, range } from 'lodash';
 import { mergeObjects } from '@lykmapipo/common';
 import { getNumber, getNumbers } from '@lykmapipo/env';
 
@@ -10,6 +10,7 @@ const GEO_POINT = 'Point';
 const GEO_LINESTRING = 'LineString';
 const GEO_POLYGON = 'Polygon';
 const GEO_MULTIPOINT = 'MultiPoint';
+const GEO_MULTILINESTRING = 'MultiLineString';
 
 /**
  * @function randomLongitude
@@ -268,6 +269,11 @@ export const randomMultiPoint = (optns = { vertices: 2 }) => {
  * @function randomMultiLineString
  * @name randomMultiLineString
  * @description Generate random GeoJSON MultiLineString
+ * @param {object} [optns={}] valid option
+ * @param {number} [optns.lines=2] how many LineString.
+ * @param {number} [optns.vertices=2] how many coordinates each LineString will contain.
+ * @param {number[]} [optns.bbox=[-180, -90, 180, 90]] a bounding box inside
+ * of which geometries are placed.
  * @returns {object} valid GeoJSON MultiLineString
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
@@ -280,8 +286,20 @@ export const randomMultiPoint = (optns = { vertices: 2 }) => {
  * const geo = randomMultiLineString();
  * // => { type: 'MultiLineString', coordinates:[ ... ] }
  */
-export const randomMultiLineString = () => {
-  return {};
+export const randomMultiLineString = (optns = { lines: 2, vertices: 2 }) => {
+  // ensure lines & vertices
+  const options = mergeObjects({ lines: 2, vertices: 2 }, optns);
+
+  // refs
+  const type = GEO_MULTILINESTRING;
+  const coordinates = [
+    ...map(range(options.lines), () => {
+      return randomPositions(options);
+    }),
+  ];
+
+  // return multilinestring
+  return { type, coordinates };
 };
 
 /**

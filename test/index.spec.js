@@ -92,6 +92,9 @@ describe('geo tools', () => {
     expect(randomMultiLineString).to.exist;
     expect(randomMultiLineString).to.be.a('function');
     expect(randomMultiLineString.name).to.be.equal('randomMultiLineString');
+    const geo = randomMultiLineString();
+    expect(geo.type).to.exist.and.be.equal('MultiLineString');
+    expect(geo.coordinates).to.exist.and.have.length.at.least(2);
   });
 
   it('should generate random multi polygon', () => {
