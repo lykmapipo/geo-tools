@@ -1,0 +1,119 @@
+{
+  "name": "@lykmapipo/geo-tools",
+  "version": "0.1.0",
+  "description": "Opinionated geo utilities for day to day development",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "clean": "rimraf lib dist es umd logs",
+    "prebuild": "npm test && npm run clean",
+    "build": "rollup -c",
+    "lint": "eslint --fix --ext .js src/ test/ rollup.config.js",
+    "pretest": "npm run lint",
+    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --exit --require @babel/register test/**/*.spec.js",
+    "test:unit": "npm run pretest && NODE_ENV=test mocha --require @babel/register test/unit/**/*.spec.js",
+    "test:integration": "npm run pretest && NODE_ENV=test mocha --require @babel/register test/integration/**/*.spec.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "docs": "doxdox 'lib/**/*.js' -p package.json -l markdown -o DOCUMENTATION.md",
+    "cmt": "git add -A && git-cz",
+    "changelog": "changelog",
+    "chore:deps": "ncu -u && npm install --save"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lykmapipo/common.git"
+  },
+  "keywords": [
+    "lykmapipo",
+    "common",
+    "utils",
+    "helpers"
+  ],
+  "author": {
+    "name": "lykmapipo",
+    "email": "lallyelias87@gmail.com",
+    "url": "https://github.com/lykmapipo"
+  },
+  "contributors": [
+    {
+      "name": "lykmapipo",
+      "email": "lallyelias87@gmail.com",
+      "url": "https://github.com/lykmapipo"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lykmapipo/common/issues",
+    "email": "lallyelias87@gmail.com"
+  },
+  "homepage": "https://github.com/lykmapipo/common",
+  "devDependencies": {
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/node": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/register": "^7.7.4",
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
+    "@commitlint/travis-cli": "^8.2.0",
+    "@lykmapipo/test-helpers": "^0.4.11",
+    "chai": "^4.2.0",
+    "commitizen": "^4.0.3",
+    "coveralls": "^3.0.9",
+    "cz-conventional-changelog": "^3.0.2",
+    "doxdox": "^3.0.0",
+    "eslint": "^6.7.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsdoc": "^18.1.5",
+    "eslint-plugin-mocha": "^6.2.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "generate-changelog": "^1.8.0",
+    "handlebars": "^4.5.3",
+    "husky": "^3.1.0",
+    "lint-staged": "^9.5.0",
+    "lodash.template": "^4.5.0",
+    "mocha": "^6.2.2",
+    "nyc": "^14.1.1",
+    "prettier": "^1.19.1",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.27.5",
+    "shelljs": "^0.8.3"
+  },
+  "dependencies": {
+    "@lykmapipo/common": ">=0.28.12",
+    "@lykmapipo/env": ">=0.15.0",
+    "async": ">=3.1.0",
+    "geojson-stream": ">=0.1.0",
+    "lodash": ">=4.17.15",
+    "pump": ">=3.0.0",
+    "shapefile": ">=0.6.6"
+  },
+  "engines": {
+    "node": ">=8.11.1",
+    "npm": ">=5.6.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "npm run lint",
+      "git add -A"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
+}
