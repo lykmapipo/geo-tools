@@ -1,9 +1,9 @@
-import { getNumbers } from '@lykmapipo/env';
+import { getNumber, getNumbers } from '@lykmapipo/env';
 
 // internal
-// const MAX_LENGTH = 0.0001;
-// const MAX_ROTATION = Math.PI / 8;
-const GEO_BBOX = getNumbers('GEO_BBOX', [-180, -90, 180, 90]);
+const MAX_LENGTH = getNumber('GEO_MAX_LENGTH', 0.0001);
+const MAX_ROTATION = getNumber('GEO_MAX_ROTATION', Math.PI / 8);
+const GEO_BBOX = getNumbers('GEO_BBOX', []) || [-180, -90, 180, 90];
 const GEO_POINT = 'Point';
 const GEO_LINESTRING = 'LineString';
 
@@ -58,8 +58,12 @@ export const randomLatitude = (optns = {}) => {
 /**
  * @function randomPosition
  * @name randomPosition
- * @description Generate random position
+ * @description Generate next random position
  * @param {object} [optns={}] valid option
+ * @param {number} [optns.angle = (Math.random() * 2 * Math.PI)] valid angle in radian between points
+ * @param {number} [optns.distance = (Math.random() * 0.0001)] valid distance between points
+ * @param {number} [optns.longitude] valid longitude on last point
+ * @param {number} [optns.latitude] valid latitude on last point
  * @param {number[]} [optns.bbox=[-180, -90, 180, 90]] a bounding box inside
  * of which geometries are placed.
  * @returns {object} valid position
@@ -74,9 +78,26 @@ export const randomLatitude = (optns = {}) => {
  * // => [ -76.4103176657406, 67.07040223216296 ]
  */
 export const randomPosition = (optns = {}) => {
-  const longitude = randomLongitude(optns);
-  const latitude = randomLatitude(optns);
-  return [longitude, latitude];
+  // TODO: restric within bbox
+
+  // calculate angle
+  const angle =
+    (optns.angle || Math.random() * 2 * Math.PI) +
+    (Math.random() - 0.5) * MAX_ROTATION * 2;
+
+  // calculate hypotenus
+  const distance = optns.distance || Math.random() * MAX_LENGTH;
+
+  // x2 = x1 + dcos0
+  const x1 = optns.longitude || randomLongitude(optns);
+  const x2 = x1 + distance * Math.cos(angle);
+
+  // y2 = y1 + dsin0
+  const y1 = optns.latitude || randomLatitude(optns);
+  const y2 = y1 + distance * Math.sin(angle);
+
+  // return x2,y2
+  return [x2, y2];
 };
 
 /**
