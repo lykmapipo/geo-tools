@@ -1,5 +1,7 @@
 import { expect } from '@lykmapipo/test-helpers';
 import {
+  randomLongitude,
+  randomLatitude,
   randomPoint,
   randomLineString,
   randomPolygon,
@@ -11,6 +13,26 @@ import {
 } from '../src';
 
 describe('geo tools', () => {
+  it('should generate random longitude', () => {
+    expect(randomLongitude).to.exist;
+    expect(randomLongitude).to.be.a('function');
+    expect(randomLongitude.name).to.be.equal('randomLongitude');
+    const longitude = randomLongitude();
+    expect(longitude).to.exist;
+    expect(longitude).to.be.above(-180);
+    expect(longitude).to.be.below(180);
+  });
+
+  it('should generate random latitude', () => {
+    expect(randomLatitude).to.exist;
+    expect(randomLatitude).to.be.a('function');
+    expect(randomLatitude.name).to.be.equal('randomLatitude');
+    const latitude = randomLatitude();
+    expect(latitude).to.exist;
+    expect(latitude).to.be.above(-90);
+    expect(latitude).to.be.below(90);
+  });
+
   it('should generate random point', () => {
     expect(randomPoint).to.exist;
     expect(randomPoint).to.be.a('function');

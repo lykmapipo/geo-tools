@@ -1,8 +1,13 @@
+const BBOX = [-180, -90, 180, 90];
+
 /**
- * @function randomPoint
- * @name randomPoint
- * @description Generate random GeoJSON Point
- * @returns {object} valid GeoJSON Point
+ * @function randomLongitude
+ * @name randomLongitude
+ * @description Generate random longitude
+ * @param {object} [optns={}] valid option
+ * @param {number[]} [optns.bbox=[-180, -90, 180, 90]] a bounding box inside
+ * of which geometries are placed.
+ * @returns {object} valid longitude
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
  * @since 0.1.0
@@ -10,12 +15,58 @@
  * @static
  * @public
  * @example
- *
- * const geo = randomPoint();
+ * const longitude = randomLongitude();
+ * // => -76.4103176657406
+ */
+export const randomLongitude = (optns = {}) => {
+  const { bbox = BBOX } = optns;
+  const longitude = Math.random() * (bbox[2] - bbox[0]) + bbox[0];
+  return longitude;
+};
+
+/**
+ * @function randomLatitude
+ * @name randomLatitude
+ * @description Generate random latitude
+ * @param {object} [optns={}] valid option
+ * @param {number[]} [optns.bbox=[-180, -90, 180, 90]] a bounding box inside
+ * of which geometries are placed.
+ * @returns {object} valid latitude
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * const latitude = randomLatitude();
+ * // => 67.07040223216296
+ */
+export const randomLatitude = (optns = {}) => {
+  const { bbox = BBOX } = optns;
+  const latitude = Math.random() * (bbox[3] - bbox[1]) + bbox[1];
+  return latitude;
+};
+
+/**
+ * @function randomPoint
+ * @name randomPoint
+ * @description Generate random GeoJSON Point
+ * @param {object} [optns={}] valid option
+ * @param {number[]} [optns.bbox=[-180, -90, 180, 90]] a bounding box inside
+ * of which geometries are placed.
+ * @returns {object} valid GeoJSON Point
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example const geo = randomPoint();
  * // => { type: 'Point', coordinates:[ ... ] }
  */
-export const randomPoint = () => {
-  return {};
+export const randomPoint = (optns = {}) => {
+  return optns;
 };
 
 /**
