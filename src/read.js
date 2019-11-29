@@ -16,7 +16,7 @@
  *  // handle read error
  *  if(error) { ... }
  *
- *  // hanlde read finished
+ *  // handle read finished
  *  else if(finished){ ... }
  *
  *  // process feature
@@ -49,7 +49,7 @@ export const readShapefile = (path, done) => {
  *  // handle read error
  *  if(error) { ... }
  *
- *  // hanlde read finished
+ *  // handle read finished
  *  else if(finished){ ... }
  *
  *  // process feature
