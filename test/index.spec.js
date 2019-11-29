@@ -101,6 +101,9 @@ describe('geo tools', () => {
     expect(randomMultiPolygon).to.exist;
     expect(randomMultiPolygon).to.be.a('function');
     expect(randomMultiPolygon.name).to.be.equal('randomMultiPolygon');
+    const geo = randomMultiPolygon();
+    expect(geo.type).to.exist.and.be.equal('MultiPolygon');
+    expect(geo.coordinates).to.exist.and.have.length.at.least(2);
   });
 
   it('should generate random geometry', () => {

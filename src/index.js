@@ -11,6 +11,7 @@ const GEO_LINESTRING = 'LineString';
 const GEO_POLYGON = 'Polygon';
 const GEO_MULTIPOINT = 'MultiPoint';
 const GEO_MULTILINESTRING = 'MultiLineString';
+const GEO_MULTIPOLYGON = 'MultiPolygon';
 
 /**
  * @function randomLongitude
@@ -223,7 +224,7 @@ export const randomLineString = (optns = { vertices: 2 }) => {
 export const randomPolygon = (optns = { vertices: 3 }) => {
   // ensure 4 vertices & above
   const options = mergeObjects({ vertices: 3 }, optns);
-  options.vertices = options.vertices < 4 ? 3 : options.vertices;
+  options.vertices = options.vertices < 3 ? 3 : options.vertices;
 
   // refs
   const type = GEO_POLYGON;
@@ -306,6 +307,11 @@ export const randomMultiLineString = (optns = { lines: 2, vertices: 2 }) => {
  * @function randomMultiPolygon
  * @name randomMultiPolygon
  * @description Generate random GeoJSON MultiPolygon
+ * @param {object} [optns={}] valid option
+ * @param {number} [optns.polygons=2] how many Polygons.
+ * @param {number} [optns.vertices=2] how many coordinates each Polygon will contain.
+ * @param {number[]} [optns.bbox=[-180, -90, 180, 90]] a bounding box inside
+ * of which geometries are placed.
  * @returns {object} valid GeoJSON MultiPolygon
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
@@ -318,8 +324,21 @@ export const randomMultiLineString = (optns = { lines: 2, vertices: 2 }) => {
  * const geo = randomMultiPolygon();
  * // => {type: 'MultiPolygon', coordinates:[] }
  */
-export const randomMultiPolygon = () => {
-  return {};
+export const randomMultiPolygon = (optns = { polygons: 2, vertices: 3 }) => {
+  // ensure polygons & vertices
+  const options = mergeObjects({ polygons: 2, vertices: 3 }, optns);
+
+  // refs
+  const type = GEO_MULTIPOLYGON;
+  const coordinates = [
+    ...map(range(options.polygons), () => {
+      const coords = randomPositions(options);
+      return [[...coords, coords[0]]];
+    }),
+  ];
+
+  // return multipolygon
+  return { type, coordinates };
 };
 
 /**
