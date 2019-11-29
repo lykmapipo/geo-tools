@@ -27,7 +27,12 @@
     "lykmapipo",
     "common",
     "utils",
-    "helpers"
+    "helpers",
+    "geo",
+    "shapefile",
+    "geojson",
+    "geometry",
+    "feature"
   ],
   "author": {
     "name": "lykmapipo",
