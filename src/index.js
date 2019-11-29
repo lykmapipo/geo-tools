@@ -1,4 +1,8 @@
-const BBOX = [-180, -90, 180, 90];
+import { getNumbers } from '@lykmapipo/env';
+
+// internal
+const GEO_BBOX = getNumbers('GEO_BBOX', [-180, -90, 180, 90]);
+const GEO_POINT = 'Point';
 
 /**
  * @function randomLongitude
@@ -19,7 +23,7 @@ const BBOX = [-180, -90, 180, 90];
  * // => -76.4103176657406
  */
 export const randomLongitude = (optns = {}) => {
-  const { bbox = BBOX } = optns;
+  const { bbox = GEO_BBOX } = optns;
   const longitude = Math.random() * (bbox[2] - bbox[0]) + bbox[0];
   return longitude;
 };
@@ -43,7 +47,7 @@ export const randomLongitude = (optns = {}) => {
  * // => 67.07040223216296
  */
 export const randomLatitude = (optns = {}) => {
-  const { bbox = BBOX } = optns;
+  const { bbox = GEO_BBOX } = optns;
   const latitude = Math.random() * (bbox[3] - bbox[1]) + bbox[1];
   return latitude;
 };
@@ -66,7 +70,9 @@ export const randomLatitude = (optns = {}) => {
  * // => { type: 'Point', coordinates:[ ... ] }
  */
 export const randomPoint = (optns = {}) => {
-  return optns;
+  const longitude = randomLongitude(optns);
+  const latitude = randomLatitude(optns);
+  return { type: GEO_POINT, coordinates: [longitude, latitude] };
 };
 
 /**

@@ -37,6 +37,10 @@ describe('geo tools', () => {
     expect(randomPoint).to.exist;
     expect(randomPoint).to.be.a('function');
     expect(randomPoint.name).to.be.equal('randomPoint');
+    const point = randomPoint();
+    expect(point).to.exist;
+    expect(point.type).to.exist.and.be.equal('Point');
+    expect(point.coordinates).to.exist.and.have.length(2);
   });
 
   it('should generate random line string', () => {
