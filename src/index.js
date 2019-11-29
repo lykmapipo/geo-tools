@@ -1,8 +1,11 @@
 import { getNumbers } from '@lykmapipo/env';
 
 // internal
+// const MAX_LENGTH = 0.0001;
+// const MAX_ROTATION = Math.PI / 8;
 const GEO_BBOX = getNumbers('GEO_BBOX', [-180, -90, 180, 90]);
 const GEO_POINT = 'Point';
+const GEO_LINESTRING = 'LineString';
 
 /**
  * @function randomLongitude
@@ -53,6 +56,30 @@ export const randomLatitude = (optns = {}) => {
 };
 
 /**
+ * @function randomPosition
+ * @name randomPosition
+ * @description Generate random position
+ * @param {object} [optns={}] valid option
+ * @param {number[]} [optns.bbox=[-180, -90, 180, 90]] a bounding box inside
+ * of which geometries are placed.
+ * @returns {object} valid position
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * const position = randomPosition();
+ * // => [ -76.4103176657406, 67.07040223216296 ]
+ */
+export const randomPosition = (optns = {}) => {
+  const longitude = randomLongitude(optns);
+  const latitude = randomLatitude(optns);
+  return [longitude, latitude];
+};
+
+/**
  * @function randomPoint
  * @name randomPoint
  * @description Generate random GeoJSON Point
@@ -70,15 +97,16 @@ export const randomLatitude = (optns = {}) => {
  * // => { type: 'Point', coordinates:[ ... ] }
  */
 export const randomPoint = (optns = {}) => {
-  const longitude = randomLongitude(optns);
-  const latitude = randomLatitude(optns);
-  return { type: GEO_POINT, coordinates: [longitude, latitude] };
+  return { type: GEO_POINT, coordinates: randomPosition(optns) };
 };
 
 /**
  * @function randomLineString
  * @name randomLineString
  * @description Generate random GeoJSON LineString
+ * @param {object} [optns={}] valid option
+ * @param {number[]} [optns.bbox=[-180, -90, 180, 90]] a bounding box inside
+ * of which geometries are placed.
  * @returns {object} valid GeoJSON LineString
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
@@ -86,13 +114,14 @@ export const randomPoint = (optns = {}) => {
  * @version 0.1.0
  * @static
  * @public
- * @example
- *
- * const geo = randomLineString();
+ * @example const geo = randomLineString();
  * // => { type: 'LineString', coordinates:[ ... ] }
  */
-export const randomLineString = () => {
-  return {};
+export const randomLineString = (optns = {}) => {
+  return {
+    type: GEO_LINESTRING,
+    coordinates: [randomPosition(optns), randomPosition(optns)],
+  };
 };
 
 /**
