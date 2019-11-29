@@ -12,6 +12,7 @@ import {
   randomMultiPolygon,
   randomGeometry,
   randomGeometryCollection,
+  readGeoJSON,
 } from '../src';
 
 describe('geo tools', () => {
@@ -131,5 +132,52 @@ describe('geo tools', () => {
     const geo = randomGeometryCollection();
     expect(geo.type).to.exist.and.be.equal('GeometryCollection');
     expect(geo.geometries).to.exist.and.have.length.at.least(2);
+  });
+
+  it('should read geojson file', function(done) {
+    readGeoJSON(
+      `${__dirname}/./fixtures/Regions.geojson`,
+      (error, { finished, feature, next }) => {
+        expect(error).to.not.exist;
+        if (error) {
+          done(error);
+        } else if (finished) {
+          expect(finished).to.be.ok;
+          done();
+        } else {
+          expect(feature).to.exist;
+          expect(next).to.exist.and.be.a('function');
+          next();
+        }
+      }
+    );
+  });
+
+  it('should handle no file error when read geojson file', done => {
+    readGeoJSON(
+      './fixtures/Regions.geojson',
+      (error, { finished, feature, next }) => {
+        expect(error).to.exist;
+        expect(finished).to.be.true;
+        expect(feature).to.not.exist;
+        expect(next).to.not.exist;
+        done();
+      }
+    );
+  });
+
+  it('should handle process error when read geojson file', done => {
+    readGeoJSON(
+      `${__dirname}/./fixtures/Regions.geojson`,
+      (error, { next }) => {
+        if (error) {
+          expect(error).to.exist;
+          expect(error.message).to.be.equal('Processing Error');
+          done();
+        } else {
+          next(new Error('Processing Error'));
+        }
+      }
+    );
   });
 });

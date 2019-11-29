@@ -1,3 +1,8 @@
+import { createReadStream } from 'fs';
+import { Writable } from 'stream';
+import { parse as parseGeoJSON } from 'geojson-stream';
+import { mergeObjects } from '@lykmapipo/common';
+
 /**
  * @function readShapefile
  * @name readShapefile
@@ -61,5 +66,29 @@ export const readShapefile = (path, done) => {
  * });
  */
 export const readGeoJSON = (path, done) => {
-  return done();
+  // refs
+  const results = { finished: true, feature: undefined, next: undefined };
+
+  // read geojson file
+  const readStream = createReadStream(path);
+  readStream.on('error', error => done(error, mergeObjects(results)));
+
+  // wire GeoJSON parser
+  const parseStream = readStream.pipe(parseGeoJSON());
+  parseStream.on('error', error => done(error, mergeObjects(results)));
+
+  // wire write & processing stream handler
+  const processStream = parseStream.pipe(
+    new Writable({
+      write: (feature, encoding, callback) => {
+        return done(null, { feature, finished: false, next: callback });
+      },
+      objectMode: true,
+    })
+  );
+  processStream.on('error', error => done(error, mergeObjects(results)));
+  processStream.on('finish', () => done(null, mergeObjects(results)));
+
+  // return;
+  return processStream;
 };
