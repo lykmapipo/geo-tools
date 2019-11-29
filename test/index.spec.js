@@ -74,6 +74,9 @@ describe('geo tools', () => {
     expect(randomPolygon).to.exist;
     expect(randomPolygon).to.be.a('function');
     expect(randomPolygon.name).to.be.equal('randomPolygon');
+    const geo = randomPolygon();
+    expect(geo.type).to.exist.and.be.equal('Polygon');
+    expect(geo.coordinates).to.exist.and.have.length(1);
   });
 
   it('should generate random multi point', () => {

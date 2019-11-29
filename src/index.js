@@ -8,6 +8,7 @@ const MAX_ROTATION = getNumber('GEO_MAX_ROTATION', Math.PI / 8);
 const GEO_BBOX = getNumbers('GEO_BBOX', []) || [-180, -90, 180, 90];
 const GEO_POINT = 'Point';
 const GEO_LINESTRING = 'LineString';
+const GEO_POLYGON = 'Polygon';
 const GEO_MULTIPOINT = 'MultiPoint';
 
 /**
@@ -122,16 +123,19 @@ export const randomPosition = (optns = {}) => {
  * // => [ [-76.41031, 67.0704], ...]
  */
 export const randomPositions = (optns = { vertices: 2 }) => {
+  // ensure options
+  const options = mergeObjects({ vertices: 2, bbox: GEO_BBOX }, optns);
+
   // refs
   let coordinates = [];
   let longitude;
   let latitude;
 
   // compute position for vertices
-  forEach(range(optns.vertices), () => {
+  forEach(range(options.vertices), () => {
     // random next position after last
     const position = randomPosition(
-      mergeObjects(optns, { longitude, latitude })
+      mergeObjects(options, { longitude, latitude })
     );
     [longitude, latitude] = position;
     // collect position
@@ -199,6 +203,10 @@ export const randomLineString = (optns = { vertices: 2 }) => {
  * @function randomPolygon
  * @name randomPolygon
  * @description Generate random GeoJSON Polygon
+ * @param {object} [optns={}] valid option
+ * @param {number} [optns.vertices=4] how many coordinates Polygon will contain.
+ * @param {number[]} [optns.bbox=[-180, -90, 180, 90]] a bounding box inside
+ * of which geometries are placed.
  * @returns {object} valid GeoJSON Polygon
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
@@ -211,8 +219,20 @@ export const randomLineString = (optns = { vertices: 2 }) => {
  * const geo = randomPolygon();
  * // => { type: 'Polygon', coordinates:[ ... ] }
  */
-export const randomPolygon = () => {
-  return {};
+export const randomPolygon = (optns = { vertices: 3 }) => {
+  // ensure 4 vertices & above
+  const options = mergeObjects({ vertices: 3 }, optns);
+  options.vertices = options.vertices < 4 ? 3 : options.vertices;
+
+  // refs
+  const type = GEO_POLYGON;
+  let coordinates = randomPositions(options);
+
+  // close the ring
+  coordinates = [...coordinates, coordinates[0]];
+
+  // return linestring
+  return { type, coordinates: [coordinates] };
 };
 
 /**
