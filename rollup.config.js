@@ -8,6 +8,7 @@ export default [
       'os',
       'fs',
       'path',
+      'stream',
       ...keys(pkg.dependencies),
       ...keys(pkg.peerDependencies),
     ],
