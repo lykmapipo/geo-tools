@@ -12,6 +12,7 @@ import {
   randomMultiPolygon,
   randomGeometry,
   randomGeometryCollection,
+  readShapefile,
   readGeoJSON,
 } from '../src';
 
@@ -134,50 +135,83 @@ describe('geo tools', () => {
     expect(geo.geometries).to.exist.and.have.length.at.least(2);
   });
 
-  it('should read geojson file', function(done) {
-    readGeoJSON(
-      `${__dirname}/./fixtures/Regions.geojson`,
-      (error, { finished, feature, next }) => {
-        expect(error).to.not.exist;
-        if (error) {
-          done(error);
-        } else if (finished) {
-          expect(finished).to.be.ok;
-          done();
-        } else {
-          expect(feature).to.exist;
-          expect(next).to.exist.and.be.a('function');
-          next();
-        }
+  it('should read shapefile', done => {
+    const path = `${__dirname}/fixtures/points.shp`;
+    readShapefile(path, (error, { finished, feature, next }) => {
+      if (error) {
+        expect(error).to.exist;
+        return done(error);
       }
-    );
+      if (finished) {
+        expect(finished).to.be.ok;
+        return done();
+      }
+      expect(feature).to.exist;
+      expect(next).to.exist.and.be.a('function');
+      return next();
+    });
+  });
+
+  it('should handle no file error when read shapefile', done => {
+    const path = './fixtures/points.shp';
+    readShapefile(path, (error, { finished, feature, next }) => {
+      expect(error).to.exist;
+      expect(finished).to.be.true;
+      expect(feature).to.not.exist;
+      expect(next).to.not.exist;
+      done();
+    });
+  });
+
+  it('should handle process error when read shapefile', done => {
+    const path = `${__dirname}/fixtures/points.shp`;
+    readShapefile(path, (error, { next }) => {
+      if (error) {
+        expect(error).to.exist;
+        expect(error.message).to.be.equal('Processing Error');
+        return done();
+      }
+      return next(new Error('Processing Error'));
+    });
+  });
+
+  it('should read geojson file', done => {
+    const path = `${__dirname}/./fixtures/points.geojson`;
+    readGeoJSON(path, (error, { finished, feature, next }) => {
+      if (error) {
+        expect(error).to.not.exist;
+        return done(error);
+      }
+      if (finished) {
+        expect(finished).to.be.ok;
+        return done();
+      }
+      expect(feature).to.exist;
+      expect(next).to.exist.and.be.a('function');
+      return next();
+    });
   });
 
   it('should handle no file error when read geojson file', done => {
-    readGeoJSON(
-      './fixtures/Regions.geojson',
-      (error, { finished, feature, next }) => {
-        expect(error).to.exist;
-        expect(finished).to.be.true;
-        expect(feature).to.not.exist;
-        expect(next).to.not.exist;
-        done();
-      }
-    );
+    const path = './fixtures/points.geojson';
+    readGeoJSON(path, (error, { finished, feature, next }) => {
+      expect(error).to.exist;
+      expect(finished).to.be.true;
+      expect(feature).to.not.exist;
+      expect(next).to.not.exist;
+      done();
+    });
   });
 
   it('should handle process error when read geojson file', done => {
-    readGeoJSON(
-      `${__dirname}/./fixtures/Regions.geojson`,
-      (error, { next }) => {
-        if (error) {
-          expect(error).to.exist;
-          expect(error.message).to.be.equal('Processing Error');
-          done();
-        } else {
-          next(new Error('Processing Error'));
-        }
+    const path = `${__dirname}/./fixtures/points.geojson`;
+    readGeoJSON(path, (error, { next }) => {
+      if (error) {
+        expect(error).to.exist;
+        expect(error.message).to.be.equal('Processing Error');
+        return done();
       }
-    );
+      return next(new Error('Processing Error'));
+    });
   });
 });

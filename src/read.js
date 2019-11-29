@@ -2,6 +2,7 @@ import { createReadStream } from 'fs';
 import { Writable } from 'stream';
 import { parse as parseGeoJSON } from 'geojson-stream';
 import { mergeObjects } from '@lykmapipo/common';
+import { open as openShapefile } from 'shapefile';
 
 /**
  * @function readShapefile
@@ -9,7 +10,6 @@ import { mergeObjects } from '@lykmapipo/common';
  * @description Read shapefile stream
  * @param {string} path valid shapefile path
  * @param {Function} done callback to invoke on feature read
- * @returns {object} valid return options
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
  * @since 0.1.0
@@ -33,7 +33,40 @@ import { mergeObjects } from '@lykmapipo/common';
  * });
  */
 export const readShapefile = (path, done) => {
-  return done();
+  // refs
+  const results = { finished: true, feature: undefined, next: undefined };
+
+  // read & parse feature from shapefile
+  const readFeature = (source, processFeature) => {
+    const onFeature = ({ done: finished, value: feature }) => {
+      const next = error => {
+        if (error) {
+          throw error;
+        } else if (finished) {
+          return mergeObjects(results);
+        } else {
+          return source.read().then(onFeature);
+        }
+      };
+      if (finished) {
+        return mergeObjects(results);
+      }
+      return processFeature(null, {
+        feature,
+        finished: false,
+        next,
+      });
+    };
+    return source.read().then(onFeature);
+  };
+
+  // open & read shapefile
+  openShapefile(path)
+    .then(source => readFeature(source, done)) // wire write & processing handler
+    .then(finished => done(null, mergeObjects(finished))) // handle read finish
+    .catch(error => done(error, mergeObjects(results))); // handle read error
+
+  // return;
 };
 
 /**
@@ -42,7 +75,6 @@ export const readShapefile = (path, done) => {
  * @description Read GeoJSON file stream
  * @param {string} path valid GeoJSON file path
  * @param {Function} done callback to invoke on feature read
- * @returns {object} valid return options
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
  * @since 0.1.0
@@ -90,5 +122,4 @@ export const readGeoJSON = (path, done) => {
   processStream.on('finish', () => done(null, mergeObjects(results)));
 
   // return;
-  return processStream;
 };

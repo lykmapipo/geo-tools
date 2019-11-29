@@ -23,6 +23,7 @@ npm install --save @lykmapipo/geo-tools
 import {
   randomPosition,
   randomPoint,
+  readShapefile,
   readGeoJSON
 } from '@lykmapipo/geo-tools';
 
@@ -32,20 +33,32 @@ randomPosition()
 randomPoint()
 //=> { type: 'Point', coordinates: [ -76.41031, 67.0704 ] }
 
+readShapefile('data.shp', (error, { finished, feature, next }) => {
+  // handle read errors
+  if (error) {
+    return done(error);
+  } 
+  // handle read finish
+  if (finished) {
+    return done();
+  } 
+  // process features
+  // and request next chunk from stream
+  process(error => next(error));
+});
+
 readGeoJSON('data.geojson', (error, { finished, feature, next }) => {
   // handle read errors
   if (error) {
-    done(error);
+    return done(error);
   } 
   // handle read finish
-  else if (finished) {
-    done();
+  if (finished) {
+    return done();
   } 
   // process features
-  else {
-    //... process & save
-    next(); // request next chunk from stream
-  }
+  // and request next chunk from stream
+  process(error => next(error));
 });
 ```
 
