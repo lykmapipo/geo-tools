@@ -1,4 +1,4 @@
-import { forEach, map, range, sample } from 'lodash';
+import { forEach, map, range, sample, sampleSize } from 'lodash';
 import { mergeObjects } from '@lykmapipo/common';
 import { getNumber, getNumbers } from '@lykmapipo/env';
 
@@ -12,6 +12,7 @@ const GEO_POLYGON = 'Polygon';
 const GEO_MULTIPOINT = 'MultiPoint';
 const GEO_MULTILINESTRING = 'MultiLineString';
 const GEO_MULTIPOLYGON = 'MultiPolygon';
+const GEO_GEOMETRYCOLLECTION = 'GeometryCollection';
 
 /**
  * @function randomLongitude
@@ -384,6 +385,7 @@ export const randomGeometry = (optns = {}) => {
  * @function randomGeometryCollection
  * @name randomGeometryCollection
  * @description Generate random GeoJSON GeometryCollection
+ * @param {object} [optns={}] valid option
  * @returns {object} valid GeoJSON GeometryCollection
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
@@ -396,6 +398,31 @@ export const randomGeometry = (optns = {}) => {
  * const geo = randomGeometryCollection();
  * // => { type: 'GeometryCollection', geometries: [ ... ] }
  */
-export const randomGeometryCollection = () => {
-  return {};
+export const randomGeometryCollection = (optns = {}) => {
+  // ensure options
+  const options = mergeObjects({ lines: 2, polygons: 2, vertices: 3 }, optns);
+
+  // geometry generators
+  const generators = [
+    randomPoint,
+    randomLineString,
+    randomPolygon,
+    randomMultiPoint,
+    randomMultiLineString,
+    randomMultiPolygon,
+  ];
+
+  // refs
+  const type = GEO_GEOMETRYCOLLECTION;
+
+  // generate geometry
+  const geometries = map(
+    sampleSize(generators, options.vertices),
+    generateGeomentry => {
+      return generateGeomentry(options);
+    }
+  );
+
+  // return geometrycollection
+  return { type, geometries };
 };

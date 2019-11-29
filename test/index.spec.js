@@ -128,5 +128,8 @@ describe('geo tools', () => {
     expect(randomGeometryCollection.name).to.be.equal(
       'randomGeometryCollection'
     );
+    const geo = randomGeometryCollection();
+    expect(geo.type).to.exist.and.be.equal('GeometryCollection');
+    expect(geo.geometries).to.exist.and.have.length.at.least(2);
   });
 });
