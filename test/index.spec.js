@@ -46,16 +46,19 @@ describe('geo tools', () => {
     expect(randomPoint).to.exist;
     expect(randomPoint).to.be.a('function');
     expect(randomPoint.name).to.be.equal('randomPoint');
-    const point = randomPoint();
-    expect(point).to.exist;
-    expect(point.type).to.exist.and.be.equal('Point');
-    expect(point.coordinates).to.exist.and.have.length(2);
+    const geo = randomPoint();
+    expect(geo).to.exist;
+    expect(geo.type).to.exist.and.be.equal('Point');
+    expect(geo.coordinates).to.exist.and.have.length(2);
   });
 
   it('should generate random line string', () => {
     expect(randomLineString).to.exist;
     expect(randomLineString).to.be.a('function');
     expect(randomLineString.name).to.be.equal('randomLineString');
+    const geo = randomLineString();
+    expect(geo.type).to.exist.and.be.equal('LineString');
+    expect(geo.coordinates).to.exist.and.have.length.at.least(2);
   });
 
   it('should generate random polygon', () => {

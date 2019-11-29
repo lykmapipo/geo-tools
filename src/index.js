@@ -1,3 +1,5 @@
+import { forEach, range } from 'lodash';
+import { mergeObjects } from '@lykmapipo/common';
 import { getNumber, getNumbers } from '@lykmapipo/env';
 
 // internal
@@ -126,6 +128,7 @@ export const randomPoint = (optns = {}) => {
  * @name randomLineString
  * @description Generate random GeoJSON LineString
  * @param {object} [optns={}] valid option
+ * @param {number} [optns.vertices=2] how many coordinates each LineString will contain.
  * @param {number[]} [optns.bbox=[-180, -90, 180, 90]] a bounding box inside
  * of which geometries are placed.
  * @returns {object} valid GeoJSON LineString
@@ -138,10 +141,27 @@ export const randomPoint = (optns = {}) => {
  * @example const geo = randomLineString();
  * // => { type: 'LineString', coordinates:[ ... ] }
  */
-export const randomLineString = (optns = {}) => {
+export const randomLineString = (optns = { vertices: 2 }) => {
+  // refs
+  let coordinates = [];
+  let longitude;
+  let latitude;
+
+  // compute position for vertices
+  forEach(range(optns.vertices || 2), () => {
+    // random next position after last
+    const position = randomPosition(
+      mergeObjects(optns, { longitude, latitude })
+    );
+    [longitude, latitude] = position;
+    // collect position
+    coordinates = [...coordinates, position];
+  });
+
+  // return linestring
   return {
     type: GEO_LINESTRING,
-    coordinates: [randomPosition(optns), randomPosition(optns)],
+    coordinates,
   };
 };
 
