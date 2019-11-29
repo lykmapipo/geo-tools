@@ -8,6 +8,7 @@ const MAX_ROTATION = getNumber('GEO_MAX_ROTATION', Math.PI / 8);
 const GEO_BBOX = getNumbers('GEO_BBOX', []) || [-180, -90, 180, 90];
 const GEO_POINT = 'Point';
 const GEO_LINESTRING = 'LineString';
+const GEO_MULTIPOINT = 'MultiPoint';
 
 /**
  * @function randomLongitude
@@ -127,7 +128,7 @@ export const randomPositions = (optns = { vertices: 2 }) => {
   let latitude;
 
   // compute position for vertices
-  forEach(range(optns.vertices || 2), () => {
+  forEach(range(optns.vertices), () => {
     // random next position after last
     const position = randomPosition(
       mergeObjects(optns, { longitude, latitude })
@@ -218,6 +219,10 @@ export const randomPolygon = () => {
  * @function randomMultiPoint
  * @name randomMultiPoint
  * @description Generate random GeoJSON MultiPoint
+ * @param {object} [optns={}] valid option
+ * @param {number} [optns.vertices=2] how many points MultiPoint will contain.
+ * @param {number[]} [optns.bbox=[-180, -90, 180, 90]] a bounding box inside
+ * of which geometries are placed.
  * @returns {object} valid GeoJSON MultiPoint
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
@@ -230,8 +235,13 @@ export const randomPolygon = () => {
  * const geo = randomMultiPoint();
  * // => { type: 'MultiPoint', coordinates:[ ... ] }
  */
-export const randomMultiPoint = () => {
-  return {};
+export const randomMultiPoint = (optns = { vertices: 2 }) => {
+  // refs
+  const type = GEO_MULTIPOINT;
+  const coordinates = randomPositions(optns);
+
+  // return multipoint
+  return { type, coordinates };
 };
 
 /**

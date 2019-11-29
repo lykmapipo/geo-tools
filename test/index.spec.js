@@ -80,6 +80,9 @@ describe('geo tools', () => {
     expect(randomMultiPoint).to.exist;
     expect(randomMultiPoint).to.be.a('function');
     expect(randomMultiPoint.name).to.be.equal('randomMultiPoint');
+    const geo = randomMultiPoint();
+    expect(geo.type).to.exist.and.be.equal('MultiPoint');
+    expect(geo.coordinates).to.exist.and.have.length.at.least(2);
   });
 
   it('should generate random point', () => {
