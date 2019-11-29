@@ -1,4 +1,4 @@
-import { forEach, map, range } from 'lodash';
+import { forEach, map, range, sample } from 'lodash';
 import { mergeObjects } from '@lykmapipo/common';
 import { getNumber, getNumbers } from '@lykmapipo/env';
 
@@ -345,6 +345,7 @@ export const randomMultiPolygon = (optns = { polygons: 2, vertices: 3 }) => {
  * @function randomGeometry
  * @name randomGeometry
  * @description Generate random GeoJSON Geometry
+ * @param {object} [optns={}] valid option
  * @returns {object} valid GeoJSON Geometry
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
@@ -357,8 +358,26 @@ export const randomMultiPolygon = (optns = { polygons: 2, vertices: 3 }) => {
  * const geo = randomGeometry();
  * // => { type: 'Point', coordinates:[ ... ] }
  */
-export const randomGeometry = () => {
-  return {};
+export const randomGeometry = (optns = {}) => {
+  // ensure options
+  const options = mergeObjects({ lines: 2, polygons: 2, vertices: 3 }, optns);
+
+  // geometry generators
+  const generators = [
+    randomPoint,
+    randomLineString,
+    randomPolygon,
+    randomMultiPoint,
+    randomMultiLineString,
+    randomMultiPolygon,
+  ];
+
+  // generate geometry
+  const generateGeomentry = sample(generators);
+  const geometry = generateGeomentry(options);
+
+  // retunr geometry
+  return geometry;
 };
 
 /**

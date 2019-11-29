@@ -110,6 +110,16 @@ describe('geo tools', () => {
     expect(randomGeometry).to.exist;
     expect(randomGeometry).to.be.a('function');
     expect(randomGeometry.name).to.be.equal('randomGeometry');
+    const geo = randomGeometry();
+    expect(geo.type).to.exist.and.be.oneOf([
+      'Point',
+      'LineString',
+      'Polygon',
+      'MultiPoint',
+      'MultiLineString',
+      'MultiPolygon',
+    ]);
+    expect(geo.coordinates).to.exist.and.have.length.at.least(2);
   });
 
   it('should generate random geometry collection', () => {
