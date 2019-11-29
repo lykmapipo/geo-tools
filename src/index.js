@@ -120,7 +120,12 @@ export const randomPosition = (optns = {}) => {
  * // => { type: 'Point', coordinates:[ ... ] }
  */
 export const randomPoint = (optns = {}) => {
-  return { type: GEO_POINT, coordinates: randomPosition(optns) };
+  // refs
+  const type = GEO_POINT;
+  const coordinates = randomPosition(optns);
+
+  // return point
+  return { type, coordinates };
 };
 
 /**
@@ -143,6 +148,7 @@ export const randomPoint = (optns = {}) => {
  */
 export const randomLineString = (optns = { vertices: 2 }) => {
   // refs
+  const type = GEO_LINESTRING;
   let coordinates = [];
   let longitude;
   let latitude;
@@ -159,10 +165,7 @@ export const randomLineString = (optns = { vertices: 2 }) => {
   });
 
   // return linestring
-  return {
-    type: GEO_LINESTRING,
-    coordinates,
-  };
+  return { type, coordinates };
 };
 
 /**
