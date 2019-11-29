@@ -21,11 +21,15 @@ npm install --save @lykmapipo/geo-tools
 
 ```js
 import {
+  randomPosition,
   randomPoint
 } from '@lykmapipo/geo-tools';
 
+randomPosition()
+//=> [ -76.41031, 67.0704]
+
 randomPoint()
-// => { type: 'Point', coordinates: [ -76.41031, 67.0704] }
+//=> { type: 'Point', coordinates: [ -76.41031, 67.0704] }
 ```
 
 ## Test
