@@ -62,6 +62,13 @@ readGeoJSON('data.geojson', (error, { finished, feature, next }) => {
 });
 ```
 
+## Environment
+```js
+GEO_MAX_LENGTH=0.0001
+GEO_MAX_ROTATION=0.39269908169872414
+GEO_BBOX=-180,-90,180,90
+```
+
 ## Test
 
 - Clone this repository
