@@ -1,18 +1,17 @@
 import { forEach, map, range, sample, sampleSize } from 'lodash';
 import { mergeObjects } from '@lykmapipo/common';
-import { getNumber, getNumbers } from '@lykmapipo/env';
-
-// internal
-const MAX_LENGTH = getNumber('GEO_MAX_LENGTH', 0.0001);
-const MAX_ROTATION = getNumber('GEO_MAX_ROTATION', Math.PI / 8);
-const GEO_BBOX = getNumbers('GEO_BBOX', []) || [-180, -90, 180, 90];
-const GEO_POINT = 'Point';
-const GEO_LINESTRING = 'LineString';
-const GEO_POLYGON = 'Polygon';
-const GEO_MULTIPOINT = 'MultiPoint';
-const GEO_MULTILINESTRING = 'MultiLineString';
-const GEO_MULTIPOLYGON = 'MultiPolygon';
-const GEO_GEOMETRYCOLLECTION = 'GeometryCollection';
+import {
+  GEO_MAX_LENGTH,
+  GEO_MAX_ROTATION,
+  GEO_BBOX,
+  GEO_POINT,
+  GEO_LINESTRING,
+  GEO_POLYGON,
+  GEO_MULTIPOINT,
+  GEO_MULTILINESTRING,
+  GEO_MULTIPOLYGON,
+  GEO_GEOMETRY_COLLECTION,
+} from './constant';
 
 /**
  * @function randomLongitude
@@ -90,10 +89,10 @@ export const randomPosition = (optns = {}) => {
   // calculate angle
   const angle =
     (optns.angle || Math.random() * 2 * Math.PI) +
-    (Math.random() - 0.5) * MAX_ROTATION * 2;
+    (Math.random() - 0.5) * GEO_MAX_ROTATION * 2;
 
   // calculate hypotenus
-  const distance = optns.distance || Math.random() * MAX_LENGTH;
+  const distance = optns.distance || Math.random() * GEO_MAX_LENGTH;
 
   // x2 = x1 + dcos0
   const x1 = optns.longitude || randomLongitude(optns);
@@ -413,7 +412,7 @@ export const randomGeometryCollection = (optns = {}) => {
   ];
 
   // refs
-  const type = GEO_GEOMETRYCOLLECTION;
+  const type = GEO_GEOMETRY_COLLECTION;
 
   // generate geometry
   const geometries = map(
