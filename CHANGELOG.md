@@ -1,3 +1,13 @@
+#### 0.2.1 (2019-12-03)
+
+##### Chores
+
+* **deps:**  force latest version & audit fix ([202f1040](https://github.com/lykmapipo/common/commit/202f104096e2953d52d31924b88a33bed6a2e406))
+
+##### Bug Fixes
+
+* **read:**  improve control flow on shapefile read ([9dfe3bee](https://github.com/lykmapipo/common/commit/9dfe3bee9432b4eb93b31c564333bf2d786511c9))
+
 #### 0.2.0 (2019-12-03)
 
 ##### Chores
