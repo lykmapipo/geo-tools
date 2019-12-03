@@ -1,22 +1,259 @@
-import { forEach, range, map, sample, sampleSize } from 'lodash';
-import { mergeObjects } from '@lykmapipo/common';
 import { getNumber, getNumbers } from '@lykmapipo/env';
+import { isFunction, forEach, range, map, sample, sampleSize } from 'lodash';
+import { normalizeError, assign, mergeObjects } from '@lykmapipo/common';
+import { valid, isPoint as isPoint$1, isMultiPoint as isMultiPoint$1, isLineString as isLineString$1, isMultiLineString as isMultiLineString$1, isPolygon as isPolygon$1, isMultiPolygon as isMultiPolygon$1, isGeometryCollection as isGeometryCollection$1, isFeature as isFeature$1, isFeatureCollection as isFeatureCollection$1 } from 'geojson-validation';
 import { createReadStream } from 'fs';
 import { Writable } from 'stream';
 import { parse } from 'geojson-stream';
 import { open } from 'shapefile';
 
-// internal
-const MAX_LENGTH = getNumber('GEO_MAX_LENGTH', 0.0001);
-const MAX_ROTATION = getNumber('GEO_MAX_ROTATION', Math.PI / 8);
-const GEO_BBOX = getNumbers('GEO_BBOX', []) || [-180, -90, 180, 90];
 const GEO_POINT = 'Point';
 const GEO_LINESTRING = 'LineString';
 const GEO_POLYGON = 'Polygon';
 const GEO_MULTIPOINT = 'MultiPoint';
 const GEO_MULTILINESTRING = 'MultiLineString';
 const GEO_MULTIPOLYGON = 'MultiPolygon';
-const GEO_GEOMETRYCOLLECTION = 'GeometryCollection';
+const GEO_GEOMETRY_COLLECTION = 'GeometryCollection';
+const GEO_FEATURE = 'Feature';
+const GEO_FEATURE_COLLECTION = 'FeatureCollection';
+
+const GEO_MAX_LENGTH = getNumber('GEO_MAX_LENGTH', 0.0001);
+const GEO_MAX_ROTATION = getNumber('GEO_MAX_ROTATION', Math.PI / 8);
+const GEO_BBOX = getNumbers('GEO_BBOX') || [-180, -90, 180, 90];
+
+const composeError = (errors = []) => {
+  const status = 400;
+  const code = 400;
+  const message = 'Validation failed';
+  const name = 'ValidationError';
+  const error = normalizeError(
+    assign(new Error(message), {
+      name,
+      status,
+      code,
+      message,
+    })
+  );
+  error.errors = [...errors]; // TODO: bagify(errors)
+  return error;
+};
+
+const withCallback = cb => (isValid, messages) => {
+  if (isFunction(cb)) {
+    return cb(composeError(messages), isValid);
+  }
+  return isValid;
+};
+
+/**
+ * @function isValid
+ * @name isValid
+ * @description Determines if an object is a GeoJSON Object or not
+ * @param {object} geojson valid geojson object
+ * @param {Function} [cb] callback to invoke on success or failure
+ * @returns {boolean} true if valid else false
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * isValid(geojson);
+ * // => true
+ */
+const isValid = (geojson, cb) => {
+  return valid(geojson, withCallback(cb));
+};
+
+/**
+ * @function isPoint
+ * @name isPoint
+ * @description Determines if an object is a GeoJSON Point or not
+ * @param {object} geojson valid geojson object
+ * @param {Function} [cb] callback to invoke on success or failure
+ * @returns {boolean} true if valid else false
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * isPoint(geojson);
+ * // => true
+ */
+const isPoint = (geojson, cb) => {
+  return isPoint$1(geojson, withCallback(cb));
+};
+
+/**
+ * @function isMultiPoint
+ * @name isMultiPoint
+ * @description Determines if an object is a GeoJSON MultiPoint or not
+ * @param {object} geojson valid geojson object
+ * @param {Function} [cb] callback to invoke on success or failure
+ * @returns {boolean} true if valid else false
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * isMultiPoint(geojson);
+ * // => true
+ */
+const isMultiPoint = (geojson, cb) => {
+  return isMultiPoint$1(geojson, withCallback(cb));
+};
+
+/**
+ * @function isLineString
+ * @name isLineString
+ * @description Determines if an object is a GeoJSON LineString or not
+ * @param {object} geojson valid geojson object
+ * @param {Function} [cb] callback to invoke on success or failure
+ * @returns {boolean} true if valid else false
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * isLineString(geojson);
+ * // => true
+ */
+const isLineString = (geojson, cb) => {
+  return isLineString$1(geojson, withCallback(cb));
+};
+
+/**
+ * @function isMultiLineString
+ * @name isMultiLineString
+ * @description Determines if an object is a GeoJSON MultiLineString or not
+ * @param {object} geojson valid geojson object
+ * @param {Function} [cb] callback to invoke on success or failure
+ * @returns {boolean} true if valid else false
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * isMultiLineString(geojson);
+ * // => true
+ */
+const isMultiLineString = (geojson, cb) => {
+  return isMultiLineString$1(geojson, withCallback(cb));
+};
+
+/**
+ * @function isPolygon
+ * @name isPolygon
+ * @description Determines if an object is a GeoJSON Polygon or not
+ * @param {object} geojson valid geojson object
+ * @param {Function} [cb] callback to invoke on success or failure
+ * @returns {boolean} true if valid else false
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * isPolygon(geojson);
+ * // => true
+ */
+const isPolygon = (geojson, cb) => {
+  return isPolygon$1(geojson, withCallback(cb));
+};
+
+/**
+ * @function isMultiPolygon
+ * @name isMultiPolygon
+ * @description Determines if an object is a GeoJSON MultiPolygon or not
+ * @param {object} geojson valid geojson object
+ * @param {Function} [cb] callback to invoke on success or failure
+ * @returns {boolean} true if valid else false
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * isMultiPolygon(geojson);
+ * // => true
+ */
+const isMultiPolygon = (geojson, cb) => {
+  return isMultiPolygon$1(geojson, withCallback(cb));
+};
+
+/**
+ * @function isGeometryCollection
+ * @name isGeometryCollection
+ * @description Determines if an object is a GeoJSON GeometryCollection or not
+ * @param {object} geojson valid geojson object
+ * @param {Function} [cb] callback to invoke on success or failure
+ * @returns {boolean} true if valid else false
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * isGeometryCollection(geojson);
+ * // => true
+ */
+const isGeometryCollection = (geojson, cb) => {
+  return isGeometryCollection$1(geojson, withCallback(cb));
+};
+
+/**
+ * @function isFeature
+ * @name isFeature
+ * @description Determines if an object is a GeoJSON Feature or not
+ * @param {object} geojson valid geojson object
+ * @param {Function} [cb] callback to invoke on success or failure
+ * @returns {boolean} true if valid else false
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * isFeature(geojson);
+ * // => true
+ */
+const isFeature = (geojson, cb) => {
+  return isFeature$1(geojson, withCallback(cb));
+};
+
+/**
+ * @function isFeatureCollection
+ * @name isFeatureCollection
+ * @description Determines if an object is a GeoJSON FeatureCollection or not
+ * @param {object} geojson valid geojson object
+ * @param {Function} [cb] callback to invoke on success or failure
+ * @returns {boolean} true if valid else false
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.2.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * isFeatureCollection(geojson);
+ * // => true
+ */
+const isFeatureCollection = (geojson, cb) => {
+  return isFeatureCollection$1(geojson, withCallback(cb));
+};
 
 /**
  * @function randomLongitude
@@ -94,10 +331,10 @@ const randomPosition = (optns = {}) => {
   // calculate angle
   const angle =
     (optns.angle || Math.random() * 2 * Math.PI) +
-    (Math.random() - 0.5) * MAX_ROTATION * 2;
+    (Math.random() - 0.5) * GEO_MAX_ROTATION * 2;
 
   // calculate hypotenus
-  const distance = optns.distance || Math.random() * MAX_LENGTH;
+  const distance = optns.distance || Math.random() * GEO_MAX_LENGTH;
 
   // x2 = x1 + dcos0
   const x1 = optns.longitude || randomLongitude(optns);
@@ -417,7 +654,7 @@ const randomGeometryCollection = (optns = {}) => {
   ];
 
   // refs
-  const type = GEO_GEOMETRYCOLLECTION;
+  const type = GEO_GEOMETRY_COLLECTION;
 
   // generate geometry
   const geometries = map(
@@ -551,4 +788,4 @@ const readGeoJSON = (path, done) => {
   // return;
 };
 
-export { randomGeometry, randomGeometryCollection, randomLatitude, randomLineString, randomLongitude, randomMultiLineString, randomMultiPoint, randomMultiPolygon, randomPoint, randomPolygon, randomPosition, randomPositions, readGeoJSON, readShapefile };
+export { GEO_BBOX, GEO_FEATURE, GEO_FEATURE_COLLECTION, GEO_GEOMETRY_COLLECTION, GEO_LINESTRING, GEO_MAX_LENGTH, GEO_MAX_ROTATION, GEO_MULTILINESTRING, GEO_MULTIPOINT, GEO_MULTIPOLYGON, GEO_POINT, GEO_POLYGON, isFeature, isFeatureCollection, isGeometryCollection, isLineString, isMultiLineString, isMultiPoint, isMultiPolygon, isPoint, isPolygon, isValid, randomGeometry, randomGeometryCollection, randomLatitude, randomLineString, randomLongitude, randomMultiLineString, randomMultiPoint, randomMultiPolygon, randomPoint, randomPolygon, randomPosition, randomPositions, readGeoJSON, readShapefile };

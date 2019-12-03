@@ -1,3 +1,20 @@
+#### 0.2.0 (2019-12-03)
+
+##### Chores
+
+* **deps:**  force latest version & audit fix ([4b1d3667](https://github.com/lykmapipo/common/commit/4b1d366734e67ba8c7bce0558bd3bde0b016559b))
+
+##### Documentation Changes
+
+* **env:**  specify common settings ([b4baf6ab](https://github.com/lykmapipo/common/commit/b4baf6ab8efee8dffd40dbc9fdca29305941d989))
+
+##### New Features
+
+* **validation:**
+  *  normalize error object ([a7f88e5f](https://github.com/lykmapipo/common/commit/a7f88e5ffa4dc6ae7a4e9e5344c90ca443436951))
+  *  implement geojson types validate helpers ([b4f325a6](https://github.com/lykmapipo/common/commit/b4f325a6882c90db58e25d1a1dc305f8abda0b0a))
+* **constant:**  extract common values ([72d4162f](https://github.com/lykmapipo/common/commit/72d4162f0c98a4eb9a00a9ea5958d62f6d6de535))
+
 #### 0.1.0 (2019-11-29)
 
 ##### Chores

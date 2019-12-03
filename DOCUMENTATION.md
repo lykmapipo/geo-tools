@@ -1,3 +1,323 @@
+#### isValid(geojson[, cb]) 
+
+Determines if an object is a GeoJSON Object or not
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| geojson | `object`  | valid geojson object | &nbsp; |
+| cb | `Function`  | callback to invoke on success or failure | *Optional* |
+
+
+
+
+##### Examples
+
+```javascript
+isValid(geojson);
+// => true
+```
+
+
+##### Returns
+
+
+- `boolean`  true if valid else false
+
+
+
+#### isPoint(geojson[, cb]) 
+
+Determines if an object is a GeoJSON Point or not
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| geojson | `object`  | valid geojson object | &nbsp; |
+| cb | `Function`  | callback to invoke on success or failure | *Optional* |
+
+
+
+
+##### Examples
+
+```javascript
+isPoint(geojson);
+// => true
+```
+
+
+##### Returns
+
+
+- `boolean`  true if valid else false
+
+
+
+#### isMultiPoint(geojson[, cb]) 
+
+Determines if an object is a GeoJSON MultiPoint or not
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| geojson | `object`  | valid geojson object | &nbsp; |
+| cb | `Function`  | callback to invoke on success or failure | *Optional* |
+
+
+
+
+##### Examples
+
+```javascript
+isMultiPoint(geojson);
+// => true
+```
+
+
+##### Returns
+
+
+- `boolean`  true if valid else false
+
+
+
+#### isLineString(geojson[, cb]) 
+
+Determines if an object is a GeoJSON LineString or not
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| geojson | `object`  | valid geojson object | &nbsp; |
+| cb | `Function`  | callback to invoke on success or failure | *Optional* |
+
+
+
+
+##### Examples
+
+```javascript
+isLineString(geojson);
+// => true
+```
+
+
+##### Returns
+
+
+- `boolean`  true if valid else false
+
+
+
+#### isMultiLineString(geojson[, cb]) 
+
+Determines if an object is a GeoJSON MultiLineString or not
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| geojson | `object`  | valid geojson object | &nbsp; |
+| cb | `Function`  | callback to invoke on success or failure | *Optional* |
+
+
+
+
+##### Examples
+
+```javascript
+isMultiLineString(geojson);
+// => true
+```
+
+
+##### Returns
+
+
+- `boolean`  true if valid else false
+
+
+
+#### isPolygon(geojson[, cb]) 
+
+Determines if an object is a GeoJSON Polygon or not
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| geojson | `object`  | valid geojson object | &nbsp; |
+| cb | `Function`  | callback to invoke on success or failure | *Optional* |
+
+
+
+
+##### Examples
+
+```javascript
+isPolygon(geojson);
+// => true
+```
+
+
+##### Returns
+
+
+- `boolean`  true if valid else false
+
+
+
+#### isMultiPolygon(geojson[, cb]) 
+
+Determines if an object is a GeoJSON MultiPolygon or not
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| geojson | `object`  | valid geojson object | &nbsp; |
+| cb | `Function`  | callback to invoke on success or failure | *Optional* |
+
+
+
+
+##### Examples
+
+```javascript
+isMultiPolygon(geojson);
+// => true
+```
+
+
+##### Returns
+
+
+- `boolean`  true if valid else false
+
+
+
+#### isGeometryCollection(geojson[, cb]) 
+
+Determines if an object is a GeoJSON GeometryCollection or not
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| geojson | `object`  | valid geojson object | &nbsp; |
+| cb | `Function`  | callback to invoke on success or failure | *Optional* |
+
+
+
+
+##### Examples
+
+```javascript
+isGeometryCollection(geojson);
+// => true
+```
+
+
+##### Returns
+
+
+- `boolean`  true if valid else false
+
+
+
+#### isFeature(geojson[, cb]) 
+
+Determines if an object is a GeoJSON Feature or not
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| geojson | `object`  | valid geojson object | &nbsp; |
+| cb | `Function`  | callback to invoke on success or failure | *Optional* |
+
+
+
+
+##### Examples
+
+```javascript
+isFeature(geojson);
+// => true
+```
+
+
+##### Returns
+
+
+- `boolean`  true if valid else false
+
+
+
+#### isFeatureCollection(geojson[, cb]) 
+
+Determines if an object is a GeoJSON FeatureCollection or not
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| geojson | `object`  | valid geojson object | &nbsp; |
+| cb | `Function`  | callback to invoke on success or failure | *Optional* |
+
+
+
+
+##### Examples
+
+```javascript
+isFeatureCollection(geojson);
+// => true
+```
+
+
+##### Returns
+
+
+- `boolean`  true if valid else false
+
+
+
 #### randomLongitude([optns&#x3D;{}]) 
 
 Generate random longitude
