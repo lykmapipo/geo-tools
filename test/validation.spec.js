@@ -18,11 +18,30 @@ describe('validation', () => {
     expect(isValid).to.be.a('function');
     expect(isValid.name).to.be.equal('isValid');
     expect(
-      isPoint({
+      isValid({
         type: 'Point',
         coordinates: [100.0, 0.0],
       })
     ).to.be.true;
+  });
+
+  it('should check for invalid geojson object', done => {
+    expect(isValid).to.exist;
+    expect(isValid).to.be.a('function');
+    expect(isValid.name).to.be.equal('isValid');
+    isValid(
+      {
+        type: 'Poit',
+        coordinates: [100.0],
+      },
+      error => {
+        expect(error).to.exist;
+        expect(error.name).to.be.equal('ValidationError');
+        expect(error.message).to.be.equal('Validation failed');
+        expect(error.errors).to.exist.and.have.length.at.least(1);
+        done();
+      }
+    );
   });
 
   it('should check for valid point', () => {
@@ -35,6 +54,25 @@ describe('validation', () => {
         coordinates: [100.0, 0.0],
       })
     ).to.be.true;
+  });
+
+  it('should check for invalid point', done => {
+    expect(isValid).to.exist;
+    expect(isValid).to.be.a('function');
+    expect(isValid.name).to.be.equal('isValid');
+    isPoint(
+      {
+        type: 'Point',
+        coordinates: [100.0],
+      },
+      error => {
+        expect(error).to.exist;
+        expect(error.name).to.be.equal('ValidationError');
+        expect(error.message).to.be.equal('Validation failed');
+        expect(error.errors).to.exist.and.have.length.at.least(1);
+        done();
+      }
+    );
   });
 
   it('should check for valid multi point', () => {
@@ -52,6 +90,25 @@ describe('validation', () => {
     ).to.be.true;
   });
 
+  it('should check for invalid multi point', done => {
+    expect(isValid).to.exist;
+    expect(isValid).to.be.a('function');
+    expect(isValid.name).to.be.equal('isValid');
+    isMultiPoint(
+      {
+        type: 'MultiPoint',
+        coordinates: [[100.0, 0.0], [101.0]],
+      },
+      error => {
+        expect(error).to.exist;
+        expect(error.name).to.be.equal('ValidationError');
+        expect(error.message).to.be.equal('Validation failed');
+        expect(error.errors).to.exist.and.have.length.at.least(1);
+        done();
+      }
+    );
+  });
+
   it('should check for valid line string', () => {
     expect(isLineString).to.exist;
     expect(isLineString).to.be.a('function');
@@ -65,6 +122,25 @@ describe('validation', () => {
         ],
       })
     ).to.be.true;
+  });
+
+  it('should check for invalid line string', done => {
+    expect(isValid).to.exist;
+    expect(isValid).to.be.a('function');
+    expect(isValid.name).to.be.equal('isValid');
+    isLineString(
+      {
+        type: 'LineString',
+        coordinates: [[100.0, 0.0], [101.0]],
+      },
+      error => {
+        expect(error).to.exist;
+        expect(error.name).to.be.equal('ValidationError');
+        expect(error.message).to.be.equal('Validation failed');
+        expect(error.errors).to.exist.and.have.length.at.least(1);
+        done();
+      }
+    );
   });
 
   it('should check for valid multi line string', () => {
@@ -88,6 +164,31 @@ describe('validation', () => {
     ).to.be.true;
   });
 
+  it('should check for invalid multi line string', done => {
+    expect(isValid).to.exist;
+    expect(isValid).to.be.a('function');
+    expect(isValid.name).to.be.equal('isValid');
+    isMultiLineString(
+      {
+        type: 'MultiLineString',
+        coordinates: [
+          [
+            [100.0, 0.0],
+            [101.0, 1.0],
+          ],
+          [],
+        ],
+      },
+      error => {
+        expect(error).to.exist;
+        expect(error.name).to.be.equal('ValidationError');
+        expect(error.message).to.be.equal('Validation failed');
+        expect(error.errors).to.exist.and.have.length.at.least(1);
+        done();
+      }
+    );
+  });
+
   it('should check for valid polygon', () => {
     expect(isPolygon).to.exist;
     expect(isPolygon).to.be.a('function');
@@ -108,6 +209,27 @@ describe('validation', () => {
     ).to.be.true;
   });
 
+  it('should check for invalid polygon', done => {
+    expect(isValid).to.exist;
+    expect(isValid).to.be.a('function');
+    expect(isValid.name).to.be.equal('isValid');
+    isPolygon(
+      {
+        type: 'Polygon',
+        coordinates: [
+          [[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], []],
+        ],
+      },
+      error => {
+        expect(error).to.exist;
+        expect(error.name).to.be.equal('ValidationError');
+        expect(error.message).to.be.equal('Validation failed');
+        expect(error.errors).to.exist.and.have.length.at.least(1);
+        done();
+      }
+    );
+  });
+
   it('should check for valid multi polygon', () => {
     expect(isMultiPolygon).to.exist;
     expect(isMultiPolygon).to.be.a('function');
@@ -125,25 +247,32 @@ describe('validation', () => {
               [102.0, 2.0],
             ],
           ],
-          [
-            [
-              [100.0, 0.0],
-              [101.0, 0.0],
-              [101.0, 1.0],
-              [100.0, 1.0],
-              [100.0, 0.0],
-            ],
-            [
-              [100.2, 0.2],
-              [100.2, 0.8],
-              [100.8, 0.8],
-              [100.8, 0.2],
-              [100.2, 0.2],
-            ],
-          ],
+          [],
         ],
       })
     ).to.be.true;
+  });
+
+  it('should check for invalid multi polygon', done => {
+    expect(isValid).to.exist;
+    expect(isValid).to.be.a('function');
+    expect(isValid.name).to.be.equal('isValid');
+    isMultiPolygon(
+      {
+        type: 'MultiPolygon',
+        coordinates: [
+          [[[102.0, 2.0], [103.0, 2.0], [103.0, 3.0], [102.0, 3.0], []]],
+          [],
+        ],
+      },
+      error => {
+        expect(error).to.exist;
+        expect(error.name).to.be.equal('ValidationError');
+        expect(error.message).to.be.equal('Validation failed');
+        expect(error.errors).to.exist.and.have.length.at.least(1);
+        done();
+      }
+    );
   });
 
   it('should check for valid geometry collection', () => {
@@ -170,6 +299,34 @@ describe('validation', () => {
     ).to.be.true;
   });
 
+  it('should check for invalid geometry collection', done => {
+    expect(isValid).to.exist;
+    expect(isValid).to.be.a('function');
+    expect(isValid.name).to.be.equal('isValid');
+    isGeometryCollection(
+      {
+        type: 'GeometryCollection',
+        geometries: [
+          {
+            type: 'Point',
+            coordinates: [100.0],
+          },
+          {
+            type: 'LineString',
+            coordinates: [[101.0, 0.0], [102.0]],
+          },
+        ],
+      },
+      error => {
+        expect(error).to.exist;
+        expect(error.name).to.be.equal('ValidationError');
+        expect(error.message).to.be.equal('Validation failed');
+        expect(error.errors).to.exist.and.have.length.at.least(1);
+        done();
+      }
+    );
+  });
+
   it('should check for valid feature', () => {
     expect(isFeature).to.exist;
     expect(isFeature).to.be.a('function');
@@ -186,6 +343,31 @@ describe('validation', () => {
         },
       })
     ).to.be.true;
+  });
+
+  it('should check for invalid feature', done => {
+    expect(isValid).to.exist;
+    expect(isValid).to.be.a('function');
+    expect(isValid.name).to.be.equal('isValid');
+    isFeature(
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [102.0],
+        },
+        properties: {
+          prop0: 'value0',
+        },
+      },
+      error => {
+        expect(error).to.exist;
+        expect(error.name).to.be.equal('ValidationError');
+        expect(error.message).to.be.equal('Validation failed');
+        expect(error.errors).to.exist.and.have.length.at.least(1);
+        done();
+      }
+    );
   });
 
   it('should check for valid feature collection', () => {
@@ -209,5 +391,35 @@ describe('validation', () => {
         ],
       })
     ).to.be.true;
+  });
+
+  it('should check for invalid feature collection', done => {
+    expect(isValid).to.exist;
+    expect(isValid).to.be.a('function');
+    expect(isValid.name).to.be.equal('isValid');
+    isFeatureCollection(
+      {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [102.0],
+            },
+            properties: {
+              prop0: 'value0',
+            },
+          },
+        ],
+      },
+      error => {
+        expect(error).to.exist;
+        expect(error.name).to.be.equal('ValidationError');
+        expect(error.message).to.be.equal('Validation failed');
+        expect(error.errors).to.exist.and.have.length.at.least(1);
+        done();
+      }
+    );
   });
 });
