@@ -39,18 +39,18 @@ export const readShapefile = (path, done) => {
   // read & parse feature from shapefile
   const readFeature = (source, processFeature) => {
     const onFeature = ({ done: finished, value: feature }) => {
+      // try read next feature
       const next = error => {
         if (error) {
-          throw error;
-        } else if (finished) {
-          return mergeObjects(results);
-        } else {
-          return source.read().then(onFeature);
+          return processFeature(error, mergeObjects(results));
         }
+        return source.read().then(onFeature);
       };
+      // read finish
       if (finished) {
-        return mergeObjects(results);
+        return processFeature(null, mergeObjects(results));
       }
+      // process read feature
       return processFeature(null, {
         feature,
         finished: false,
@@ -63,7 +63,6 @@ export const readShapefile = (path, done) => {
   // open & read shapefile
   openShapefile(path)
     .then(source => readFeature(source, done)) // wire write & processing handler
-    .then(finished => done(null, mergeObjects(finished))) // handle read finish
     .catch(error => done(error, mergeObjects(results))); // handle read error
 
   // return;
