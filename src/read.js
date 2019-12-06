@@ -1,5 +1,6 @@
 import { createReadStream } from 'fs';
 import { Writable } from 'stream';
+import parseCsv from 'csv-parse';
 import { parse as parseGeoJSON } from 'geojson-stream';
 import { mergeObjects } from '@lykmapipo/common';
 import { open as openShapefile } from 'shapefile';
@@ -106,6 +107,62 @@ export const readGeoJSON = (path, done) => {
 
   // wire GeoJSON parser
   const parseStream = readStream.pipe(parseGeoJSON());
+  parseStream.on('error', error => done(error, mergeObjects(results)));
+
+  // wire write & processing stream handler
+  const processStream = parseStream.pipe(
+    new Writable({
+      write: (feature, encoding, callback) => {
+        return done(null, { feature, finished: false, next: callback });
+      },
+      objectMode: true,
+    })
+  );
+  processStream.on('error', error => done(error, mergeObjects(results)));
+  processStream.on('finish', () => done(null, mergeObjects(results)));
+
+  // return;
+};
+
+/**
+ * @function readCsv
+ * @name readCsv
+ * @description Read csv file stream
+ * @param {string} path valid csv file path
+ * @param {Function} done callback to invoke on feature read
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.3.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * readCsv(path, (error, { finished, feature, next }) => {
+ *  // handle read error
+ *  if(error) { ... }
+ *
+ *  // handle read finished
+ *  else if(finished){ ... }
+ *
+ *  // process feature
+ *  // and read next chunk
+ *  else {
+ *   //...
+ *   return next();
+ *  }
+ * });
+ */
+export const readCsv = (path, done) => {
+  // refs
+  const results = { finished: true, feature: undefined, next: undefined };
+
+  // read csv file
+  const readStream = createReadStream(path);
+  readStream.on('error', error => done(error, mergeObjects(results)));
+
+  // wire csv parser
+  const csvParseOptions = { bom: true, columns: true };
+  const parseStream = readStream.pipe(parseCsv(csvParseOptions));
   parseStream.on('error', error => done(error, mergeObjects(results)));
 
   // wire write & processing stream handler
