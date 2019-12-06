@@ -715,7 +715,7 @@ const geo = randomGeometryCollection();
 
 
 
-#### readShapefile(path, done) 
+#### readShapefile(optns, done) 
 
 Read shapefile stream
 
@@ -726,7 +726,8 @@ Read shapefile stream
 
 | Name | Type | Description |  |
 | ---- | ---- | ----------- | -------- |
-| path | `string`  | valid shapefile path | &nbsp; |
+| optns | `object`  | valid options | &nbsp; |
+| optns.path | `string`  | valid shapefile path | &nbsp; |
 | done | `Function`  | callback to invoke on feature read | &nbsp; |
 
 
@@ -759,7 +760,7 @@ readShapefile(path, (error, { finished, feature, next }) => {
 
 
 
-#### readGeoJSON(path, done) 
+#### readGeoJSON(optns, done) 
 
 Read GeoJSON file stream
 
@@ -770,7 +771,8 @@ Read GeoJSON file stream
 
 | Name | Type | Description |  |
 | ---- | ---- | ----------- | -------- |
-| path | `string`  | valid GeoJSON file path | &nbsp; |
+| optns | `object`  | valid options | &nbsp; |
+| optns.path | `string`  | valid GeoJSON file path | &nbsp; |
 | done | `Function`  | callback to invoke on feature read | &nbsp; |
 
 
@@ -779,7 +781,53 @@ Read GeoJSON file stream
 ##### Examples
 
 ```javascript
-readGeoJSON(path, (error, { finished, feature, next }) => {
+readGeoJSON({ path }, (error, { finished, feature, next }) => {
+ // handle read error
+ if(error) { ... }
+
+ // handle read finished
+ else if(finished){ ... }
+
+ // process feature
+ // and read next chunk
+ else {
+  //...
+  return next();
+ }
+});
+```
+
+
+##### Returns
+
+
+- `Void`
+
+
+
+#### readCsv(optns, done) 
+
+Read csv file stream
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| optns | `object`  | valid options | &nbsp; |
+| optns.path | `string`  | valid csv file path | &nbsp; |
+| optns.delimiter | `string`  | valid csv field delimiter | &nbsp; |
+| done | `Function`  | callback to invoke on feature read | &nbsp; |
+
+
+
+
+##### Examples
+
+```javascript
+readCsv({ path }, (error, { finished, feature, next }) => {
  // handle read error
  if(error) { ... }
 

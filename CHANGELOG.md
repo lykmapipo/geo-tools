@@ -1,3 +1,17 @@
+#### 0.3.0 (2019-12-06)
+
+##### Chores
+
+* **deps:**  force latest version & audit fix ([97aacb28](https://github.com/lykmapipo/common/commit/97aacb28346c3b5904e93f6975cae624605b698b))
+
+##### New Features
+
+* **read:**  implement csv reader ([19e0d94b](https://github.com/lykmapipo/common/commit/19e0d94b3594c67c1f5e2eea58c48cab41f977fc))
+
+##### Refactors
+
+* **read:**  support pass options to actual readers ([d61add10](https://github.com/lykmapipo/common/commit/d61add10519baeb6635164b79ad6d57641b38f93))
+
 #### 0.2.2 (2019-12-05)
 
 ##### Chores

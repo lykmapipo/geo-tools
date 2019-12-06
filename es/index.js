@@ -4,6 +4,7 @@ import { normalizeError, assign, mergeObjects } from '@lykmapipo/common';
 import { valid, isPoint as isPoint$1, isMultiPoint as isMultiPoint$1, isLineString as isLineString$1, isMultiLineString as isMultiLineString$1, isPolygon as isPolygon$1, isMultiPolygon as isMultiPolygon$1, isGeometryCollection as isGeometryCollection$1, isFeature as isFeature$1, isFeatureCollection as isFeatureCollection$1 } from 'geojson-validation';
 import { createReadStream } from 'fs';
 import { Writable } from 'stream';
+import parseCsv from 'csv-parse';
 import { parse } from 'geojson-stream';
 import { open } from 'shapefile';
 
@@ -672,7 +673,8 @@ const randomGeometryCollection = (optns = {}) => {
  * @function readShapefile
  * @name readShapefile
  * @description Read shapefile stream
- * @param {string} path valid shapefile path
+ * @param {object} optns valid options
+ * @param {string} optns.path valid shapefile path
  * @param {Function} done callback to invoke on feature read
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
@@ -696,7 +698,10 @@ const randomGeometryCollection = (optns = {}) => {
  *  }
  * });
  */
-const readShapefile = (path, done) => {
+const readShapefile = (optns, done) => {
+  // merge options
+  const { path } = mergeObjects(optns);
+
   // refs
   const results = { finished: true, feature: undefined, next: undefined };
 
@@ -736,7 +741,8 @@ const readShapefile = (path, done) => {
  * @function readGeoJSON
  * @name readGeoJSON
  * @description Read GeoJSON file stream
- * @param {string} path valid GeoJSON file path
+ * @param {object} optns valid options
+ * @param {string} optns.path valid GeoJSON file path
  * @param {Function} done callback to invoke on feature read
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
@@ -745,7 +751,7 @@ const readShapefile = (path, done) => {
  * @static
  * @public
  * @example
- * readGeoJSON(path, (error, { finished, feature, next }) => {
+ * readGeoJSON({ path }, (error, { finished, feature, next }) => {
  *  // handle read error
  *  if(error) { ... }
  *
@@ -760,7 +766,10 @@ const readShapefile = (path, done) => {
  *  }
  * });
  */
-const readGeoJSON = (path, done) => {
+const readGeoJSON = (optns, done) => {
+  // merge options
+  const { path } = mergeObjects(optns);
+
   // refs
   const results = { finished: true, feature: undefined, next: undefined };
 
@@ -787,4 +796,65 @@ const readGeoJSON = (path, done) => {
   // return;
 };
 
-export { GEO_BBOX, GEO_FEATURE, GEO_FEATURE_COLLECTION, GEO_GEOMETRY_COLLECTION, GEO_LINESTRING, GEO_MAX_LENGTH, GEO_MAX_ROTATION, GEO_MULTILINESTRING, GEO_MULTIPOINT, GEO_MULTIPOLYGON, GEO_POINT, GEO_POLYGON, isFeature, isFeatureCollection, isGeometryCollection, isLineString, isMultiLineString, isMultiPoint, isMultiPolygon, isPoint, isPolygon, isValid, randomGeometry, randomGeometryCollection, randomLatitude, randomLineString, randomLongitude, randomMultiLineString, randomMultiPoint, randomMultiPolygon, randomPoint, randomPolygon, randomPosition, randomPositions, readGeoJSON, readShapefile };
+/**
+ * @function readCsv
+ * @name readCsv
+ * @description Read csv file stream
+ * @param {object} optns valid options
+ * @param {string} optns.path valid csv file path
+ * @param {string} optns.delimiter valid csv field delimiter
+ * @param {Function} done callback to invoke on feature read
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.3.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * readCsv({ path }, (error, { finished, feature, next }) => {
+ *  // handle read error
+ *  if(error) { ... }
+ *
+ *  // handle read finished
+ *  else if(finished){ ... }
+ *
+ *  // process feature
+ *  // and read next chunk
+ *  else {
+ *   //...
+ *   return next();
+ *  }
+ * });
+ */
+const readCsv = (optns, done) => {
+  // merge options
+  const parseOptns = { bom: true, columns: true, trim: true };
+  const { path, ...options } = mergeObjects(parseOptns, optns);
+
+  // refs
+  const results = { finished: true, feature: undefined, next: undefined };
+
+  // read csv file
+  const readStream = createReadStream(path);
+  readStream.on('error', error => done(error, mergeObjects(results)));
+
+  // wire csv parser
+  const parseStream = readStream.pipe(parseCsv(options));
+  parseStream.on('error', error => done(error, mergeObjects(results)));
+
+  // wire write & processing stream handler
+  const processStream = parseStream.pipe(
+    new Writable({
+      write: (feature, encoding, callback) => {
+        return done(null, { feature, finished: false, next: callback });
+      },
+      objectMode: true,
+    })
+  );
+  processStream.on('error', error => done(error, mergeObjects(results)));
+  processStream.on('finish', () => done(null, mergeObjects(results)));
+
+  // return;
+};
+
+export { GEO_BBOX, GEO_FEATURE, GEO_FEATURE_COLLECTION, GEO_GEOMETRY_COLLECTION, GEO_LINESTRING, GEO_MAX_LENGTH, GEO_MAX_ROTATION, GEO_MULTILINESTRING, GEO_MULTIPOINT, GEO_MULTIPOLYGON, GEO_POINT, GEO_POLYGON, isFeature, isFeatureCollection, isGeometryCollection, isLineString, isMultiLineString, isMultiPoint, isMultiPolygon, isPoint, isPolygon, isValid, randomGeometry, randomGeometryCollection, randomLatitude, randomLineString, randomLongitude, randomMultiLineString, randomMultiPoint, randomMultiPolygon, randomPoint, randomPolygon, randomPosition, randomPositions, readCsv, readGeoJSON, readShapefile };
