@@ -9,7 +9,8 @@ import { open as openShapefile } from 'shapefile';
  * @function readShapefile
  * @name readShapefile
  * @description Read shapefile stream
- * @param {string} path valid shapefile path
+ * @param {object} optns valid options
+ * @param {string} optns.path valid shapefile path
  * @param {Function} done callback to invoke on feature read
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
@@ -33,7 +34,10 @@ import { open as openShapefile } from 'shapefile';
  *  }
  * });
  */
-export const readShapefile = (path, done) => {
+export const readShapefile = (optns, done) => {
+  // merge options
+  const { path } = mergeObjects(optns);
+
   // refs
   const results = { finished: true, feature: undefined, next: undefined };
 
@@ -73,7 +77,8 @@ export const readShapefile = (path, done) => {
  * @function readGeoJSON
  * @name readGeoJSON
  * @description Read GeoJSON file stream
- * @param {string} path valid GeoJSON file path
+ * @param {object} optns valid options
+ * @param {string} optns.path valid GeoJSON file path
  * @param {Function} done callback to invoke on feature read
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
@@ -82,7 +87,7 @@ export const readShapefile = (path, done) => {
  * @static
  * @public
  * @example
- * readGeoJSON(path, (error, { finished, feature, next }) => {
+ * readGeoJSON({ path }, (error, { finished, feature, next }) => {
  *  // handle read error
  *  if(error) { ... }
  *
@@ -97,7 +102,10 @@ export const readShapefile = (path, done) => {
  *  }
  * });
  */
-export const readGeoJSON = (path, done) => {
+export const readGeoJSON = (optns, done) => {
+  // merge options
+  const { path } = mergeObjects(optns);
+
   // refs
   const results = { finished: true, feature: undefined, next: undefined };
 
@@ -128,7 +136,9 @@ export const readGeoJSON = (path, done) => {
  * @function readCsv
  * @name readCsv
  * @description Read csv file stream
- * @param {string} path valid csv file path
+ * @param {object} optns valid options
+ * @param {string} optns.path valid csv file path
+ * @param {string} optns.delimiter valid csv field delimiter
  * @param {Function} done callback to invoke on feature read
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
@@ -137,7 +147,7 @@ export const readGeoJSON = (path, done) => {
  * @static
  * @public
  * @example
- * readCsv(path, (error, { finished, feature, next }) => {
+ * readCsv({ path }, (error, { finished, feature, next }) => {
  *  // handle read error
  *  if(error) { ... }
  *
@@ -152,7 +162,11 @@ export const readGeoJSON = (path, done) => {
  *  }
  * });
  */
-export const readCsv = (path, done) => {
+export const readCsv = (optns, done) => {
+  // merge options
+  const parseOptns = { bom: true, columns: true, trim: true };
+  const { path, ...options } = mergeObjects(parseOptns, optns);
+
   // refs
   const results = { finished: true, feature: undefined, next: undefined };
 
@@ -161,8 +175,7 @@ export const readCsv = (path, done) => {
   readStream.on('error', error => done(error, mergeObjects(results)));
 
   // wire csv parser
-  const csvParseOptions = { bom: true, columns: true };
-  const parseStream = readStream.pipe(parseCsv(csvParseOptions));
+  const parseStream = readStream.pipe(parseCsv(options));
   parseStream.on('error', error => done(error, mergeObjects(results)));
 
   // wire write & processing stream handler

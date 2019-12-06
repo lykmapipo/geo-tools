@@ -6,7 +6,7 @@ describe('read', () => {
 
   it('should read shapefile', done => {
     const path = `${__dirname}/fixtures/points.shp`;
-    readShapefile(path, (error, { finished, feature, next }) => {
+    readShapefile({ path }, (error, { finished, feature, next }) => {
       if (error) {
         expect(error).to.exist;
         return done(error);
@@ -23,7 +23,7 @@ describe('read', () => {
 
   it('should handle no file error when read shapefile', done => {
     const path = './fixtures/points.shp';
-    readShapefile(path, (error, { finished, feature, next }) => {
+    readShapefile({ path }, (error, { finished, feature, next }) => {
       expect(error).to.exist;
       expect(finished).to.be.true;
       expect(feature).to.not.exist;
@@ -34,7 +34,7 @@ describe('read', () => {
 
   it('should handle process error when read shapefile', done => {
     const path = `${__dirname}/fixtures/points.shp`;
-    readShapefile(path, (error, { next }) => {
+    readShapefile({ path }, (error, { next }) => {
       if (error) {
         expect(error).to.exist;
         expect(error.message).to.be.equal('Processing Error');
@@ -48,7 +48,7 @@ describe('read', () => {
 
   it('should read geojson file', done => {
     const path = `${__dirname}/./fixtures/points.geojson`;
-    readGeoJSON(path, (error, { finished, feature, next }) => {
+    readGeoJSON({ path }, (error, { finished, feature, next }) => {
       if (error) {
         expect(error).to.not.exist;
         return done(error);
@@ -65,7 +65,7 @@ describe('read', () => {
 
   it('should handle no file error when read geojson file', done => {
     const path = './fixtures/points.geojson';
-    readGeoJSON(path, (error, { finished, feature, next }) => {
+    readGeoJSON({ path }, (error, { finished, feature, next }) => {
       expect(error).to.exist;
       expect(finished).to.be.true;
       expect(feature).to.not.exist;
@@ -76,7 +76,7 @@ describe('read', () => {
 
   it('should handle process error when read geojson file', done => {
     const path = `${__dirname}/./fixtures/points.geojson`;
-    readGeoJSON(path, (error, { next }) => {
+    readGeoJSON({ path }, (error, { next }) => {
       if (error) {
         expect(error).to.exist;
         expect(error.message).to.be.equal('Processing Error');
@@ -89,7 +89,7 @@ describe('read', () => {
   // csv
   it('should read csv file', done => {
     const path = `${__dirname}/./fixtures/contacts.csv`;
-    readCsv(path, (error, { finished, feature, next }) => {
+    readCsv({ path }, (error, { finished, feature, next }) => {
       if (error) {
         expect(error).to.not.exist;
         return done(error);
@@ -106,7 +106,7 @@ describe('read', () => {
 
   it('should handle no file error when read csv file', done => {
     const path = './fixtures/contacts.csv';
-    readCsv(path, (error, { finished, feature, next }) => {
+    readCsv({ path }, (error, { finished, feature, next }) => {
       expect(error).to.exist;
       expect(finished).to.be.true;
       expect(feature).to.not.exist;
@@ -117,7 +117,7 @@ describe('read', () => {
 
   it('should handle process error when read csv file', done => {
     const path = `${__dirname}/./fixtures/contacts.csv`;
-    readCsv(path, (error, { next }) => {
+    readCsv({ path }, (error, { next }) => {
       if (error) {
         expect(error).to.exist;
         expect(error.message).to.be.equal('Processing Error');
