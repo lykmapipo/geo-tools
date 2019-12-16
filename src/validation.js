@@ -268,19 +268,21 @@ export const isFeatureCollection = (geojson, cb) => {
 export const isGeometry = (geojson, cb) => {
   // async
   if (isFunction(cb)) {
-    const validators = [
-      isValid,
-      isPoint,
-      isMultiPoint,
-      isLineString,
-      isMultiLineString,
-      isPolygon,
-      isMultiPolygon,
-      isGeometryCollection,
-    ];
-    const checkIfIsGeometry = map(validators, validator => {
-      return next => validator(geojson, next);
-    });
+    const checkIfIsGeometry = map(
+      [
+        isValid,
+        isPoint,
+        isMultiPoint,
+        isLineString,
+        isMultiLineString,
+        isPolygon,
+        isMultiPolygon,
+        isGeometryCollection,
+      ],
+      validator => {
+        return next => validator(geojson, next);
+      }
+    );
     return parallel(checkIfIsGeometry, withCallback(cb));
   }
   // sync
@@ -291,8 +293,6 @@ export const isGeometry = (geojson, cb) => {
     isMultiLineString(geojson) ||
     isPolygon(geojson) ||
     isMultiPolygon(geojson) ||
-    isGeometryCollection(geojson) ||
-    isFeature(geojson) ||
-    isFeatureCollection(geojson)
+    isGeometryCollection(geojson)
   );
 };
