@@ -10,6 +10,7 @@ import {
   isGeometryCollection,
   isFeature,
   isFeatureCollection,
+  isGeometry,
 } from '../src';
 
 describe('validation', () => {
@@ -57,9 +58,9 @@ describe('validation', () => {
   });
 
   it('should check for invalid point', done => {
-    expect(isValid).to.exist;
-    expect(isValid).to.be.a('function');
-    expect(isValid.name).to.be.equal('isValid');
+    expect(isPoint).to.exist;
+    expect(isPoint).to.be.a('function');
+    expect(isPoint.name).to.be.equal('isPoint');
     isPoint(
       {
         type: 'Point',
@@ -91,9 +92,9 @@ describe('validation', () => {
   });
 
   it('should check for invalid multi point', done => {
-    expect(isValid).to.exist;
-    expect(isValid).to.be.a('function');
-    expect(isValid.name).to.be.equal('isValid');
+    expect(isMultiPoint).to.exist;
+    expect(isMultiPoint).to.be.a('function');
+    expect(isMultiPoint.name).to.be.equal('isMultiPoint');
     isMultiPoint(
       {
         type: 'MultiPoint',
@@ -125,9 +126,9 @@ describe('validation', () => {
   });
 
   it('should check for invalid line string', done => {
-    expect(isValid).to.exist;
-    expect(isValid).to.be.a('function');
-    expect(isValid.name).to.be.equal('isValid');
+    expect(isLineString).to.exist;
+    expect(isLineString).to.be.a('function');
+    expect(isLineString.name).to.be.equal('isLineString');
     isLineString(
       {
         type: 'LineString',
@@ -165,9 +166,9 @@ describe('validation', () => {
   });
 
   it('should check for invalid multi line string', done => {
-    expect(isValid).to.exist;
-    expect(isValid).to.be.a('function');
-    expect(isValid.name).to.be.equal('isValid');
+    expect(isMultiLineString).to.exist;
+    expect(isMultiLineString).to.be.a('function');
+    expect(isMultiLineString.name).to.be.equal('isMultiLineString');
     isMultiLineString(
       {
         type: 'MultiLineString',
@@ -210,9 +211,9 @@ describe('validation', () => {
   });
 
   it('should check for invalid polygon', done => {
-    expect(isValid).to.exist;
-    expect(isValid).to.be.a('function');
-    expect(isValid.name).to.be.equal('isValid');
+    expect(isPolygon).to.exist;
+    expect(isPolygon).to.be.a('function');
+    expect(isPolygon.name).to.be.equal('isPolygon');
     isPolygon(
       {
         type: 'Polygon',
@@ -254,9 +255,9 @@ describe('validation', () => {
   });
 
   it('should check for invalid multi polygon', done => {
-    expect(isValid).to.exist;
-    expect(isValid).to.be.a('function');
-    expect(isValid.name).to.be.equal('isValid');
+    expect(isMultiPolygon).to.exist;
+    expect(isMultiPolygon).to.be.a('function');
+    expect(isMultiPolygon.name).to.be.equal('isMultiPolygon');
     isMultiPolygon(
       {
         type: 'MultiPolygon',
@@ -300,9 +301,9 @@ describe('validation', () => {
   });
 
   it('should check for invalid geometry collection', done => {
-    expect(isValid).to.exist;
-    expect(isValid).to.be.a('function');
-    expect(isValid.name).to.be.equal('isValid');
+    expect(isGeometryCollection).to.exist;
+    expect(isGeometryCollection).to.be.a('function');
+    expect(isGeometryCollection.name).to.be.equal('isGeometryCollection');
     isGeometryCollection(
       {
         type: 'GeometryCollection',
@@ -346,9 +347,9 @@ describe('validation', () => {
   });
 
   it('should check for invalid feature', done => {
-    expect(isValid).to.exist;
-    expect(isValid).to.be.a('function');
-    expect(isValid.name).to.be.equal('isValid');
+    expect(isFeature).to.exist;
+    expect(isFeature).to.be.a('function');
+    expect(isFeature.name).to.be.equal('isFeature');
     isFeature(
       {
         type: 'Feature',
@@ -394,9 +395,9 @@ describe('validation', () => {
   });
 
   it('should check for invalid feature collection', done => {
-    expect(isValid).to.exist;
-    expect(isValid).to.be.a('function');
-    expect(isValid.name).to.be.equal('isValid');
+    expect(isFeatureCollection).to.exist;
+    expect(isFeatureCollection).to.be.a('function');
+    expect(isFeatureCollection.name).to.be.equal('isFeatureCollection');
     isFeatureCollection(
       {
         type: 'FeatureCollection',
@@ -412,6 +413,49 @@ describe('validation', () => {
             },
           },
         ],
+      },
+      error => {
+        expect(error).to.exist;
+        expect(error.name).to.be.equal('ValidationError');
+        expect(error.message).to.be.equal('Validation failed');
+        expect(error.errors).to.exist.and.have.length.at.least(1);
+        done();
+      }
+    );
+  });
+
+  it('should check for valid geometry', () => {
+    expect(isGeometry).to.exist;
+    expect(isGeometry).to.be.a('function');
+    expect(isGeometry.name).to.be.equal('isGeometry');
+    expect(
+      isGeometry({
+        type: 'Point',
+        coordinates: [100.0, 0.0],
+      })
+    ).to.be.true;
+  });
+
+  it('should check for invalid geometry', () => {
+    expect(isGeometry).to.exist;
+    expect(isGeometry).to.be.a('function');
+    expect(isGeometry.name).to.be.equal('isGeometry');
+    expect(
+      isGeometry({
+        type: 'Point',
+        coordinates: [100.0],
+      })
+    ).to.be.false;
+  });
+
+  it('should check for invalid geometry', done => {
+    expect(isGeometry).to.exist;
+    expect(isGeometry).to.be.a('function');
+    expect(isGeometry.name).to.be.equal('isGeometry');
+    isGeometry(
+      {
+        type: 'Point',
+        coordinates: [100.0],
       },
       error => {
         expect(error).to.exist;

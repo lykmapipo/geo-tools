@@ -1,4 +1,5 @@
-import { isFunction } from 'lodash';
+import { isFunction, map } from 'lodash';
+import { parallel } from 'async';
 import { normalizeError, assign } from '@lykmapipo/common';
 import {
   valid as checkIfIsValid,
@@ -245,4 +246,55 @@ export const isFeature = (geojson, cb) => {
  */
 export const isFeatureCollection = (geojson, cb) => {
   return checkIfIsFeatureCollection(geojson, withCallback(cb));
+};
+
+/**
+ * @function isGeometry
+ * @name isGeometry
+ * @description Determines if an object is a GeoJSON geometry or not
+ * @param {object} geojson valid geojson object
+ * @param {Function} [cb] callback to invoke on success or failure
+ * @returns {boolean} true if valid else false
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.4.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * isGeometry(geojson);
+ * // => true
+ */
+export const isGeometry = (geojson, cb) => {
+  // async
+  if (isFunction(cb)) {
+    const validators = [
+      isValid,
+      isPoint,
+      isMultiPoint,
+      isLineString,
+      isMultiLineString,
+      isPolygon,
+      isMultiPolygon,
+      isGeometryCollection,
+      isFeature,
+      isFeatureCollection,
+    ];
+    const checkIfIsGeometry = map(validators, validator => {
+      return next => validator(geojson, next);
+    });
+    return parallel(checkIfIsGeometry, withCallback(cb));
+  }
+  // sync
+  return (
+    isPoint(geojson) ||
+    isMultiPoint(geojson) ||
+    isLineString(geojson) ||
+    isMultiLineString(geojson) ||
+    isPolygon(geojson) ||
+    isMultiPolygon(geojson) ||
+    isGeometryCollection(geojson) ||
+    isFeature(geojson) ||
+    isFeatureCollection(geojson)
+  );
 };
