@@ -1,3 +1,9 @@
+#### 0.4.2 (2019-12-16)
+
+##### Bug Fixes
+
+* **geometry:**  remove feature from validations ([496d004e](https://github.com/lykmapipo/common/commit/496d004ef019a59601dd1eab3961889c599dd8fc))
+
 #### 0.4.1 (2019-12-16)
 
 ##### Bug Fixes
