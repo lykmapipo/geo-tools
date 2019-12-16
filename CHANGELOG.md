@@ -1,3 +1,9 @@
+#### 0.4.1 (2019-12-16)
+
+##### Bug Fixes
+
+* **geometry:**  excluse is feature checks ([8d7607da](https://github.com/lykmapipo/common/commit/8d7607daee62160b8f65b9c7398f6a72dc9a2460))
+
 #### 0.4.0 (2019-12-16)
 
 ##### Chores
