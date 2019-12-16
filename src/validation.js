@@ -277,8 +277,6 @@ export const isGeometry = (geojson, cb) => {
       isPolygon,
       isMultiPolygon,
       isGeometryCollection,
-      isFeature,
-      isFeatureCollection,
     ];
     const checkIfIsGeometry = map(validators, validator => {
       return next => validator(geojson, next);
