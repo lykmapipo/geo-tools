@@ -1,5 +1,6 @@
 import { getNumber, getNumbers } from '@lykmapipo/env';
-import { isFunction, forEach, range, map, sample, sampleSize } from 'lodash';
+import { isFunction, map, forEach, range, sample, sampleSize } from 'lodash';
+import { parallel } from 'async';
 import { normalizeError, assign, mergeObjects } from '@lykmapipo/common';
 import { valid, isPoint as isPoint$1, isMultiPoint as isMultiPoint$1, isLineString as isLineString$1, isMultiLineString as isMultiLineString$1, isPolygon as isPolygon$1, isMultiPolygon as isMultiPolygon$1, isGeometryCollection as isGeometryCollection$1, isFeature as isFeature$1, isFeatureCollection as isFeatureCollection$1 } from 'geojson-validation';
 import { createReadStream } from 'fs';
@@ -254,6 +255,57 @@ const isFeature = (geojson, cb) => {
  */
 const isFeatureCollection = (geojson, cb) => {
   return isFeatureCollection$1(geojson, withCallback(cb));
+};
+
+/**
+ * @function isGeometry
+ * @name isGeometry
+ * @description Determines if an object is a GeoJSON geometry or not
+ * @param {object} geojson valid geojson object
+ * @param {Function} [cb] callback to invoke on success or failure
+ * @returns {boolean} true if valid else false
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.4.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ * isGeometry(geojson);
+ * // => true
+ */
+const isGeometry = (geojson, cb) => {
+  // async
+  if (isFunction(cb)) {
+    const validators = [
+      isValid,
+      isPoint,
+      isMultiPoint,
+      isLineString,
+      isMultiLineString,
+      isPolygon,
+      isMultiPolygon,
+      isGeometryCollection,
+      isFeature,
+      isFeatureCollection,
+    ];
+    const checkIfIsGeometry = map(validators, validator => {
+      return next => validator(geojson, next);
+    });
+    return parallel(checkIfIsGeometry, withCallback(cb));
+  }
+  // sync
+  return (
+    isPoint(geojson) ||
+    isMultiPoint(geojson) ||
+    isLineString(geojson) ||
+    isMultiLineString(geojson) ||
+    isPolygon(geojson) ||
+    isMultiPolygon(geojson) ||
+    isGeometryCollection(geojson) ||
+    isFeature(geojson) ||
+    isFeatureCollection(geojson)
+  );
 };
 
 /**
@@ -857,4 +909,4 @@ const readCsv = (optns, done) => {
   // return;
 };
 
-export { GEO_BBOX, GEO_FEATURE, GEO_FEATURE_COLLECTION, GEO_GEOMETRY_COLLECTION, GEO_LINESTRING, GEO_MAX_LENGTH, GEO_MAX_ROTATION, GEO_MULTILINESTRING, GEO_MULTIPOINT, GEO_MULTIPOLYGON, GEO_POINT, GEO_POLYGON, isFeature, isFeatureCollection, isGeometryCollection, isLineString, isMultiLineString, isMultiPoint, isMultiPolygon, isPoint, isPolygon, isValid, randomGeometry, randomGeometryCollection, randomLatitude, randomLineString, randomLongitude, randomMultiLineString, randomMultiPoint, randomMultiPolygon, randomPoint, randomPolygon, randomPosition, randomPositions, readCsv, readGeoJSON, readShapefile };
+export { GEO_BBOX, GEO_FEATURE, GEO_FEATURE_COLLECTION, GEO_GEOMETRY_COLLECTION, GEO_LINESTRING, GEO_MAX_LENGTH, GEO_MAX_ROTATION, GEO_MULTILINESTRING, GEO_MULTIPOINT, GEO_MULTIPOLYGON, GEO_POINT, GEO_POLYGON, isFeature, isFeatureCollection, isGeometry, isGeometryCollection, isLineString, isMultiLineString, isMultiPoint, isMultiPolygon, isPoint, isPolygon, isValid, randomGeometry, randomGeometryCollection, randomLatitude, randomLineString, randomLongitude, randomMultiLineString, randomMultiPoint, randomMultiPolygon, randomPoint, randomPolygon, randomPosition, randomPositions, readCsv, readGeoJSON, readShapefile };

@@ -1,3 +1,13 @@
+#### 0.4.0 (2019-12-16)
+
+##### Chores
+
+* **deps:**  force latest version & audit fix ([8b6baffb](https://github.com/lykmapipo/common/commit/8b6baffb5f4e1be333f20be115ffbe06f5cc2a1b))
+
+##### New Features
+
+* **geometry:**  add validations ([bc0f8f66](https://github.com/lykmapipo/common/commit/bc0f8f66c62f3462c9ae57085e29acf6950b3b06))
+
 #### 0.3.0 (2019-12-06)
 
 ##### Chores
