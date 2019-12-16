@@ -88,7 +88,7 @@ describe('read', () => {
 
   // csv
   it('should read csv file', done => {
-    const path = `${__dirname}/./fixtures/contacts.csv`;
+    const path = `${__dirname}/./fixtures/points.csv`;
     readCsv({ path }, (error, { finished, feature, next }) => {
       if (error) {
         expect(error).to.not.exist;
@@ -105,7 +105,7 @@ describe('read', () => {
   });
 
   it('should handle no file error when read csv file', done => {
-    const path = './fixtures/contacts.csv';
+    const path = './fixtures/points.csv';
     readCsv({ path }, (error, { finished, feature, next }) => {
       expect(error).to.exist;
       expect(finished).to.be.true;
@@ -116,7 +116,7 @@ describe('read', () => {
   });
 
   it('should handle process error when read csv file', done => {
-    const path = `${__dirname}/./fixtures/contacts.csv`;
+    const path = `${__dirname}/./fixtures/points.csv`;
     readCsv({ path }, (error, { next }) => {
       if (error) {
         expect(error).to.exist;
