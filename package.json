@@ -89,6 +89,7 @@
   "dependencies": {
     "@lykmapipo/common": ">=0.30.0",
     "@lykmapipo/env": ">=0.16.2",
+    "@turf/turf": ">=5.1.6",
     "async": ">=3.1.0",
     "csv-parse": ">=4.8.3",
     "geojson-stream": ">=0.1.0",
