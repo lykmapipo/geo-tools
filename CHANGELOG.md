@@ -1,3 +1,19 @@
+#### 0.5.0 (2020-01-05)
+
+##### Chores
+
+* **deps:**  force latest version & audit fix ([11b500d3](https://github.com/lykmapipo/common/commit/11b500d3dd0d663c3dff6872e5ae6def88701b83))
+
+##### New Features
+
+* **calculation:**
+  *  compute centroid of feature ([e4f4d8ac](https://github.com/lykmapipo/common/commit/e4f4d8ac5a35066a68c36ea06b8360bf66103a06))
+  *  parse coordinate string to geometry ([83b11eff](https://github.com/lykmapipo/common/commit/83b11eff6f59de3ec02c3c6f5a8f95067912dbc7))
+
+##### Tests
+
+*  update fixtures ([44d9a01b](https://github.com/lykmapipo/common/commit/44d9a01bfd102f1773d0e9e1c9c9795332452857))
+
 #### 0.4.2 (2019-12-16)
 
 ##### Bug Fixes

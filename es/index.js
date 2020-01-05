@@ -1,8 +1,9 @@
 import { getNumber, getNumbers } from '@lykmapipo/env';
-import { isFunction, map, forEach, range, sample, sampleSize } from 'lodash';
+import { isFunction, map, compact, split, toNumber, size, first, nth, forEach, range, sample, sampleSize } from 'lodash';
 import { parallel } from 'async';
 import { normalizeError, assign, mergeObjects } from '@lykmapipo/common';
-import { valid, isPoint as isPoint$1, isMultiPoint as isMultiPoint$1, isLineString as isLineString$1, isMultiLineString as isMultiLineString$1, isPolygon as isPolygon$1, isMultiPolygon as isMultiPolygon$1, isGeometryCollection as isGeometryCollection$1, isFeature as isFeature$1, isFeatureCollection as isFeatureCollection$1 } from 'geojson-validation';
+import { valid, isPoint as isPoint$1, isMultiPoint as isMultiPoint$1, isLineString as isLineString$1, isMultiLineString as isMultiLineString$1, isPolygon as isPolygon$1, isMultiPolygon as isMultiPolygon$1, isGeometryCollection as isGeometryCollection$1, isFeature as isFeature$1, isFeatureCollection as isFeatureCollection$1, isPosition, isPolygonCoor } from 'geojson-validation';
+import { centroid, point, circle, polygon } from '@turf/turf';
 import { createReadStream } from 'fs';
 import { Writable } from 'stream';
 import parseCsv from 'csv-parse';
@@ -277,21 +278,21 @@ const isFeatureCollection = (geojson, cb) => {
 const isGeometry = (geojson, cb) => {
   // async
   if (isFunction(cb)) {
-    const validators = [
-      isValid,
-      isPoint,
-      isMultiPoint,
-      isLineString,
-      isMultiLineString,
-      isPolygon,
-      isMultiPolygon,
-      isGeometryCollection,
-      isFeature,
-      isFeatureCollection,
-    ];
-    const checkIfIsGeometry = map(validators, validator => {
-      return next => validator(geojson, next);
-    });
+    const checkIfIsGeometry = map(
+      [
+        isValid,
+        isPoint,
+        isMultiPoint,
+        isLineString,
+        isMultiLineString,
+        isPolygon,
+        isMultiPolygon,
+        isGeometryCollection,
+      ],
+      validator => {
+        return next => validator(geojson, next);
+      }
+    );
     return parallel(checkIfIsGeometry, withCallback(cb));
   }
   // sync
@@ -302,10 +303,115 @@ const isGeometry = (geojson, cb) => {
     isMultiLineString(geojson) ||
     isPolygon(geojson) ||
     isMultiPolygon(geojson) ||
-    isGeometryCollection(geojson) ||
-    isFeature(geojson) ||
-    isFeatureCollection(geojson)
+    isGeometryCollection(geojson)
   );
+};
+
+/**
+ * @function centroidOf
+ * @name centroidOf
+ * @description Calculates the centroid of a geojson feature(s) using
+ * the mean of all vertices
+ * @param {object} geojson feature to be centered
+ * @returns {object} an Object that can be used as centroid
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.5.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const point = centroidOf(polygon);
+ * // => { type: 'Point', coordinates: [ ... ] }
+ *
+ */
+const centroidOf = geojson => {
+  try {
+    let centroid$1 = centroid(geojson);
+    if (centroid$1 && centroid$1.geometry) {
+      centroid$1 = centroid$1.geometry;
+    }
+    return centroid$1;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+/**
+ * @name centroidOf
+ * @description calculates the centroid of a feature(s) using
+ * the mean of all vertices
+ * @param {object} geojson feature to be centered
+ * @returns {object} an Object that can be used as centroid
+ */
+
+/**
+ * @function parseCoordinateString
+ * @name parseCoordinateString
+ * @description Create geojson geometry or coordinate array from string
+ * @param {string} coords string to extract geojson geometry or coordinates
+ * @param {object} [optns={}] valid options
+ * @param {string} [optns.delimiter=','] long, lat seperator from string
+ * @param {string} [optns.separator=' '] long, lat pair seperator from string
+ * @returns {object|Array|undefined} geojson geometry or coordinates
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.5.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const polygonString = '-4.7,39.3 -5.2,38.6 -6.1,40.1 -4.9,39.8 -4.7,39.3'
+ * const polygon = parseCoordinateString(polygonString);
+ * // => { type: 'Polygon', coordinates: [ ... ] }
+ *
+ * const cicleString = '-9.2,39.5 180';
+ * const polygon = parseCoordinateString(cirlceString);
+ * // => { type: 'Polygon', coordinates: [ ... ] }
+ *
+ */
+const parseCoordinateString = (coords = '', optns) => {
+  // ensure options
+  const { deliminator = ',', separator = ' ' } = mergeObjects(optns);
+
+  // prepare geometry
+  try {
+    // split to pairs
+    const pairs = compact(split(coords, separator)); // [pair]
+
+    // map to points
+    const points = map(pairs, pair => {
+      return map(split(pair, deliminator), toNumber);
+    }); // [[point]]
+
+    // convert points to point geometry
+    if (size(points) === 1 && isPosition(first(points))) {
+      const { geometry } = point(first(points));
+      return geometry;
+    }
+
+    // convert circle to polygon geometry
+    if (size(points) === 2 && isPosition(first(points))) {
+      const center = first(points);
+      const radius = first(nth(points, 1));
+      const { geometry } =
+        radius === 0 ? point(center) : circle(center, radius);
+      return geometry;
+    }
+
+    // convert points to polygon geometry
+    if (isPolygonCoor([points])) {
+      const { geometry } = polygon([points]);
+      return geometry;
+    }
+
+    // return coordinates
+    return points;
+  } catch (error) {
+    return undefined;
+  }
 };
 
 /**
@@ -909,4 +1015,4 @@ const readCsv = (optns, done) => {
   // return;
 };
 
-export { GEO_BBOX, GEO_FEATURE, GEO_FEATURE_COLLECTION, GEO_GEOMETRY_COLLECTION, GEO_LINESTRING, GEO_MAX_LENGTH, GEO_MAX_ROTATION, GEO_MULTILINESTRING, GEO_MULTIPOINT, GEO_MULTIPOLYGON, GEO_POINT, GEO_POLYGON, isFeature, isFeatureCollection, isGeometry, isGeometryCollection, isLineString, isMultiLineString, isMultiPoint, isMultiPolygon, isPoint, isPolygon, isValid, randomGeometry, randomGeometryCollection, randomLatitude, randomLineString, randomLongitude, randomMultiLineString, randomMultiPoint, randomMultiPolygon, randomPoint, randomPolygon, randomPosition, randomPositions, readCsv, readGeoJSON, readShapefile };
+export { GEO_BBOX, GEO_FEATURE, GEO_FEATURE_COLLECTION, GEO_GEOMETRY_COLLECTION, GEO_LINESTRING, GEO_MAX_LENGTH, GEO_MAX_ROTATION, GEO_MULTILINESTRING, GEO_MULTIPOINT, GEO_MULTIPOLYGON, GEO_POINT, GEO_POLYGON, centroidOf, isFeature, isFeatureCollection, isGeometry, isGeometryCollection, isLineString, isMultiLineString, isMultiPoint, isMultiPolygon, isPoint, isPolygon, isValid, parseCoordinateString, randomGeometry, randomGeometryCollection, randomLatitude, randomLineString, randomLongitude, randomMultiLineString, randomMultiPoint, randomMultiPolygon, randomPoint, randomPolygon, randomPosition, randomPositions, readCsv, readGeoJSON, readShapefile };

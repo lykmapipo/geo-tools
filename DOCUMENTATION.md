@@ -318,6 +318,110 @@ isFeatureCollection(geojson);
 
 
 
+#### isGeometry(geojson[, cb]) 
+
+Determines if an object is a GeoJSON geometry or not
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| geojson | `object`  | valid geojson object | &nbsp; |
+| cb | `Function`  | callback to invoke on success or failure | *Optional* |
+
+
+
+
+##### Examples
+
+```javascript
+isGeometry(geojson);
+// => true
+```
+
+
+##### Returns
+
+
+- `boolean`  true if valid else false
+
+
+
+#### centroidOf(geojson) 
+
+Calculates the centroid of a geojson feature(s) using the mean of all vertices
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| geojson | `object`  | feature to be centered | &nbsp; |
+
+
+
+
+##### Examples
+
+```javascript
+
+const point = centroidOf(polygon);
+// => { type: 'Point', coordinates: [ ... ] }
+```
+
+
+##### Returns
+
+
+- `object`  an Object that can be used as centroid
+
+
+
+#### parseCoordinateString(coords[, optns&#x3D;{}]) 
+
+Create geojson geometry or coordinate array from string
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| coords | `string`  | string to extract geojson geometry or coordinates | &nbsp; |
+| optns&#x3D;{} | `object`  | valid options | *Optional* |
+| optns.delimiter&#x3D;&#x27;,&#x27; | `string`  | long, lat seperator from string | *Optional* |
+| optns.separator&#x3D;&#x27; | `string`  | '] long, lat pair seperator from string | *Optional* |
+
+
+
+
+##### Examples
+
+```javascript
+
+const polygonString = '-4.7,39.3 -5.2,38.6 -6.1,40.1 -4.9,39.8 -4.7,39.3'
+const polygon = parseCoordinateString(polygonString);
+// => { type: 'Polygon', coordinates: [ ... ] }
+
+const cicleString = '-9.2,39.5 180';
+const polygon = parseCoordinateString(cirlceString);
+// => { type: 'Polygon', coordinates: [ ... ] }
+```
+
+
+##### Returns
+
+
+- `object` `Array`  geojson geometry or coordinates
+
+
+
 #### randomLongitude([optns&#x3D;{}]) 
 
 Generate random longitude
