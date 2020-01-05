@@ -1,6 +1,6 @@
 import { expect } from '@lykmapipo/test-helpers';
 
-import { parseCoordinateString } from '../src';
+import { parseCoordinateString, randomPolygon, centroidOf } from '../src';
 
 describe('calculation', () => {
   it('should parse point coordinate string to geometry', () => {
@@ -31,5 +31,11 @@ describe('calculation', () => {
     expect(polygon.coordinates).to.be.an('array');
   });
 
-  it('should calculate centroid of a geometry', () => {});
+  it('should calculate centroid of a geometry', () => {
+    const polygon = randomPolygon();
+    const point = centroidOf(polygon);
+    expect(point).to.exist;
+    expect(point.type).to.be.equal('Point');
+    expect(point.coordinates).to.be.an('array');
+  });
 });

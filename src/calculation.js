@@ -2,12 +2,50 @@ import { compact, first, map, nth, toNumber, size, split } from 'lodash';
 import { mergeObjects } from '@lykmapipo/common';
 import { isPosition, isPolygonCoor } from 'geojson-validation';
 import {
+  centroid as toCentroid,
   circle as toCircle,
   point as toPoint,
   polygon as toPolygon,
 } from '@turf/turf';
 
-export const centroidOf = () => {};
+/**
+ * @function centroidOf
+ * @name centroidOf
+ * @description Calculates the centroid of a geojson feature(s) using
+ * the mean of all vertices
+ * @param {object} geojson feature to be centered
+ * @returns {object} an Object that can be used as centroid
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.5.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const point = centroidOf(polygon);
+ * // => { type: 'Point', coordinates: [ ... ] }
+ *
+ */
+export const centroidOf = geojson => {
+  try {
+    let centroid = toCentroid(geojson);
+    if (centroid && centroid.geometry) {
+      centroid = centroid.geometry;
+    }
+    return centroid;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+/**
+ * @name centroidOf
+ * @description calculates the centroid of a feature(s) using
+ * the mean of all vertices
+ * @param {object} geojson feature to be centered
+ * @returns {object} an Object that can be used as centroid
+ */
 
 /**
  * @function parseCoordinateString
