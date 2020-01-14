@@ -1,3 +1,13 @@
+#### 0.5.2 (2020-01-14)
+
+##### Chores
+
+* **deps:**  force latest version & audit fix ([67ebbc49](https://github.com/lykmapipo/common/commit/67ebbc49c55b9ecd6f7da845394e6844c820ea44))
+
+##### Bug Fixes
+
+*  use default geo bbox if non provided ([7901cb24](https://github.com/lykmapipo/common/commit/7901cb24ff2bd8e456409c86a1758d5fd30c2a63))
+
 #### 0.5.1 (2020-01-12)
 
 ##### Chores
