@@ -1,3 +1,9 @@
+#### 0.6.1 (2020-01-22)
+
+##### Bug Fixes
+
+* **seed:**  unmerge on read json file ([30f1c966](https://github.com/lykmapipo/common/commit/30f1c96699be5c1a32758490ee30c3f6cccfe16a))
+
 #### 0.6.0 (2020-01-22)
 
 ##### Chores
