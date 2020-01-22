@@ -226,7 +226,7 @@ export const readJson = (optns, done) => {
   // return;
   return readJsonFile(path, options, (error, data) => {
     if (!throws) {
-      return done(null, mergeObjects(data));
+      return done(null, data || {});
     }
     return done(error, data);
   });
