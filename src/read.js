@@ -4,6 +4,7 @@ import parseCsv from 'csv-parse';
 import { parse as parseGeoJSON } from 'geojson-stream';
 import { mergeObjects } from '@lykmapipo/common';
 import { open as openShapefile } from 'shapefile';
+import { readFile as readJsonFile } from 'jsonfile';
 
 /**
  * @function readShapefile
@@ -191,4 +192,43 @@ export const readCsv = (optns, done) => {
   processStream.on('finish', () => done(null, mergeObjects(results)));
 
   // return;
+};
+
+/**
+ * @function readJson
+ * @name readJson
+ * @description Read json file
+ * @param {object} optns valid options
+ * @param {string} optns.path valid json file path
+ * @param {boolean} optns.throws whether to ignore error
+ * @param {Function} done callback to invoke on success read or error
+ * @returns {object|Error} error or read json data
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.6.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const optns = { path: ... };
+ * readJson({ path }, (error, data) => {
+ *  // handle read error
+ *  if(error) { ... }
+ *
+ *  // process json data
+ *  else { ... }
+ * });
+ */
+export const readJson = (optns, done) => {
+  // merge options
+  const { path, throws, ...options } = mergeObjects({ throws: true }, optns);
+
+  // return;
+  return readJsonFile(path, options, (error, data) => {
+    if (!throws) {
+      return done(null, mergeObjects(data));
+    }
+    return done(error, data);
+  });
 };

@@ -1,0 +1,7 @@
+[
+  {
+    "type": "Feature",
+    "properties": { "FID": 0, "Name": "One" },
+    "geometry": { "type": "Point", "coordinates": [1, 2] }
+  }
+]

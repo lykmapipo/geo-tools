@@ -1,5 +1,5 @@
 import { expect } from '@lykmapipo/test-helpers';
-import { readShapefile, readGeoJSON, readCsv } from '../src';
+import { readShapefile, readGeoJSON, readCsv, readJson } from '../src';
 
 describe('read', () => {
   // shapefile
@@ -124,6 +124,36 @@ describe('read', () => {
         return done();
       }
       return next(new Error('Processing Error'));
+    });
+  });
+
+  // json
+
+  it('should read json file', done => {
+    const path = `${__dirname}/./fixtures/points.json`;
+    readJson({ path }, (error, data) => {
+      expect(error).to.not.exist;
+      expect(data).to.exist;
+      done(error, data);
+    });
+  });
+
+  it('should handle no file error when read json file', done => {
+    const path = './fixtures/points.json';
+    readJson({ path }, (error, data) => {
+      expect(error).to.exist;
+      expect(data).to.not.exist;
+      done();
+    });
+  });
+
+  it('should not throw error when safe read json file', done => {
+    const path = './fixtures/points.json';
+    const throws = false;
+    readJson({ path, throws }, (error, data) => {
+      expect(error).to.not.exist;
+      expect(data).to.exist.and.be.eql({});
+      done(error, data);
     });
   });
 });
