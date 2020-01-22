@@ -1,3 +1,9 @@
+#### 0.6.2 (2020-01-22)
+
+##### Chores
+
+* **release:**  compile latest source ([4779ccb9](https://github.com/lykmapipo/common/commit/4779ccb91f88b107e71be4bc17b02bf7c5fac31a))
+
 #### 0.6.1 (2020-01-22)
 
 ##### Bug Fixes
