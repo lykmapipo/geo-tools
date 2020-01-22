@@ -211,7 +211,6 @@ export const readCsv = (optns, done) => {
  * @public
  * @example
  *
- * const optns = { path: ... };
  * readJson({ path }, (error, data) => {
  *  // handle read error
  *  if(error) { ... }

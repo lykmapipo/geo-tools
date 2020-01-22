@@ -955,5 +955,45 @@ readCsv({ path }, (error, { finished, feature, next }) => {
 
 
 
+#### readJson(optns, done) 
+
+Read json file
+
+
+
+
+##### Parameters
+
+| Name | Type | Description |  |
+| ---- | ---- | ----------- | -------- |
+| optns | `object`  | valid options | &nbsp; |
+| optns.path | `string`  | valid json file path | &nbsp; |
+| optns.throws | `boolean`  | whether to ignore error | &nbsp; |
+| done | `Function`  | callback to invoke on success read or error | &nbsp; |
+
+
+
+
+##### Examples
+
+```javascript
+
+readJson({ path }, (error, data) => {
+ // handle read error
+ if(error) { ... }
+
+ // process json data
+ else { ... }
+});
+```
+
+
+##### Returns
+
+
+- `object` `Error`  error or read json data
+
+
+
 
 *Documentation generated with [doxdox](https://github.com/neogeek/doxdox).*

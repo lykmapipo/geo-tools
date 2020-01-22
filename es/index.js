@@ -9,6 +9,7 @@ import { Writable } from 'stream';
 import parseCsv from 'csv-parse';
 import { parse } from 'geojson-stream';
 import { open } from 'shapefile';
+import { readFile } from 'jsonfile';
 
 const GEO_POINT = 'Point';
 const GEO_LINESTRING = 'LineString';
@@ -1017,4 +1018,42 @@ const readCsv = (optns, done) => {
   // return;
 };
 
-export { GEO_BBOX, GEO_FEATURE, GEO_FEATURE_COLLECTION, GEO_GEOMETRY_COLLECTION, GEO_LINESTRING, GEO_MAX_LENGTH, GEO_MAX_ROTATION, GEO_MULTILINESTRING, GEO_MULTIPOINT, GEO_MULTIPOLYGON, GEO_POINT, GEO_POLYGON, centroidOf, isFeature, isFeatureCollection, isGeometry, isGeometryCollection, isLineString, isMultiLineString, isMultiPoint, isMultiPolygon, isPoint, isPolygon, isValid, parseCoordinateString, randomGeometry, randomGeometryCollection, randomLatitude, randomLineString, randomLongitude, randomMultiLineString, randomMultiPoint, randomMultiPolygon, randomPoint, randomPolygon, randomPosition, randomPositions, readCsv, readGeoJSON, readShapefile };
+/**
+ * @function readJson
+ * @name readJson
+ * @description Read json file
+ * @param {object} optns valid options
+ * @param {string} optns.path valid json file path
+ * @param {boolean} optns.throws whether to ignore error
+ * @param {Function} done callback to invoke on success read or error
+ * @returns {object|Error} error or read json data
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.6.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * readJson({ path }, (error, data) => {
+ *  // handle read error
+ *  if(error) { ... }
+ *
+ *  // process json data
+ *  else { ... }
+ * });
+ */
+const readJson = (optns, done) => {
+  // merge options
+  const { path, throws, ...options } = mergeObjects({ throws: true }, optns);
+
+  // return;
+  return readFile(path, options, (error, data) => {
+    if (!throws) {
+      return done(null, mergeObjects(data));
+    }
+    return done(error, data);
+  });
+};
+
+export { GEO_BBOX, GEO_FEATURE, GEO_FEATURE_COLLECTION, GEO_GEOMETRY_COLLECTION, GEO_LINESTRING, GEO_MAX_LENGTH, GEO_MAX_ROTATION, GEO_MULTILINESTRING, GEO_MULTIPOINT, GEO_MULTIPOLYGON, GEO_POINT, GEO_POLYGON, centroidOf, isFeature, isFeatureCollection, isGeometry, isGeometryCollection, isLineString, isMultiLineString, isMultiPoint, isMultiPolygon, isPoint, isPolygon, isValid, parseCoordinateString, randomGeometry, randomGeometryCollection, randomLatitude, randomLineString, randomLongitude, randomMultiLineString, randomMultiPoint, randomMultiPolygon, randomPoint, randomPolygon, randomPosition, randomPositions, readCsv, readGeoJSON, readJson, readShapefile };

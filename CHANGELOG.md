@@ -1,3 +1,13 @@
+#### 0.6.0 (2020-01-22)
+
+##### Chores
+
+* **deps:**  force latest version & audit fix ([9650bd0a](https://github.com/lykmapipo/common/commit/9650bd0a31598202564cde8ce9470e6fc16bf0d6))
+
+##### New Features
+
+* **read:**  read json file ([8285613f](https://github.com/lykmapipo/common/commit/8285613f1be72a20b8ecddd2b34eea99b1bd84ac))
+
 #### 0.5.4 (2020-01-22)
 
 ##### Chores
