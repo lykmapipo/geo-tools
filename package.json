@@ -1,6 +1,6 @@
 {
   "name": "@lykmapipo/geo-tools",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Opinionated geo utilities for day to day development",
   "main": "lib/index.js",
   "module": "es/index.js",
