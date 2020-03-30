@@ -417,7 +417,7 @@ export const randomGeometryCollection = (optns = {}) => {
   // generate geometry
   const geometries = map(
     sampleSize(generators, options.vertices),
-    generateGeomentry => {
+    (generateGeomentry) => {
       return generateGeomentry(options);
     }
   );

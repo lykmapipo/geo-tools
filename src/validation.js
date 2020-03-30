@@ -31,7 +31,7 @@ const composeError = (errors = []) => {
   return error;
 };
 
-const withCallback = cb => (isValid, messages) => {
+const withCallback = (cb) => (isValid, messages) => {
   if (isFunction(cb)) {
     return cb(composeError(messages), isValid);
   }
@@ -279,8 +279,8 @@ export const isGeometry = (geojson, cb) => {
         isMultiPolygon,
         isGeometryCollection,
       ],
-      validator => {
-        return next => validator(geojson, next);
+      (validator) => {
+        return (next) => validator(geojson, next);
       }
     );
     return parallel(checkIfIsGeometry, withCallback(cb));

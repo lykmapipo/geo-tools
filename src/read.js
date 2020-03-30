@@ -46,7 +46,7 @@ export const readShapefile = (optns, done) => {
   const readFeature = (source, processFeature) => {
     const onFeature = ({ done: finished, value: feature }) => {
       // try read next feature
-      const next = error => {
+      const next = (error) => {
         if (error) {
           return processFeature(error, mergeObjects(results));
         }
@@ -68,8 +68,8 @@ export const readShapefile = (optns, done) => {
 
   // open & read shapefile
   openShapefile(path)
-    .then(source => readFeature(source, done)) // wire write & processing handler
-    .catch(error => done(error, mergeObjects(results))); // handle read error
+    .then((source) => readFeature(source, done)) // wire write & processing handler
+    .catch((error) => done(error, mergeObjects(results))); // handle read error
 
   // return;
 };
@@ -112,11 +112,11 @@ export const readGeoJSON = (optns, done) => {
 
   // read geojson file
   const readStream = createReadStream(path);
-  readStream.on('error', error => done(error, mergeObjects(results)));
+  readStream.on('error', (error) => done(error, mergeObjects(results)));
 
   // wire GeoJSON parser
   const parseStream = readStream.pipe(parseGeoJSON());
-  parseStream.on('error', error => done(error, mergeObjects(results)));
+  parseStream.on('error', (error) => done(error, mergeObjects(results)));
 
   // wire write & processing stream handler
   const processStream = parseStream.pipe(
@@ -127,7 +127,7 @@ export const readGeoJSON = (optns, done) => {
       objectMode: true,
     })
   );
-  processStream.on('error', error => done(error, mergeObjects(results)));
+  processStream.on('error', (error) => done(error, mergeObjects(results)));
   processStream.on('finish', () => done(null, mergeObjects(results)));
 
   // return;
@@ -173,11 +173,11 @@ export const readCsv = (optns, done) => {
 
   // read csv file
   const readStream = createReadStream(path);
-  readStream.on('error', error => done(error, mergeObjects(results)));
+  readStream.on('error', (error) => done(error, mergeObjects(results)));
 
   // wire csv parser
   const parseStream = readStream.pipe(parseCsv(options));
-  parseStream.on('error', error => done(error, mergeObjects(results)));
+  parseStream.on('error', (error) => done(error, mergeObjects(results)));
 
   // wire write & processing stream handler
   const processStream = parseStream.pipe(
@@ -188,7 +188,7 @@ export const readCsv = (optns, done) => {
       objectMode: true,
     })
   );
-  processStream.on('error', error => done(error, mergeObjects(results)));
+  processStream.on('error', (error) => done(error, mergeObjects(results)));
   processStream.on('finish', () => done(null, mergeObjects(results)));
 
   // return;

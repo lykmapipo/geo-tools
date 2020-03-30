@@ -4,7 +4,7 @@ import { readShapefile, readGeoJSON, readCsv, readJson } from '../src';
 describe('read', () => {
   // shapefile
 
-  it('should read shapefile', done => {
+  it('should read shapefile', (done) => {
     const path = `${__dirname}/fixtures/points.shp`;
     readShapefile({ path }, (error, { finished, feature, next }) => {
       if (error) {
@@ -21,7 +21,7 @@ describe('read', () => {
     });
   });
 
-  it('should handle no file error when read shapefile', done => {
+  it('should handle no file error when read shapefile', (done) => {
     const path = './fixtures/points.shp';
     readShapefile({ path }, (error, { finished, feature, next }) => {
       expect(error).to.exist;
@@ -32,7 +32,7 @@ describe('read', () => {
     });
   });
 
-  it('should handle process error when read shapefile', done => {
+  it('should handle process error when read shapefile', (done) => {
     const path = `${__dirname}/fixtures/points.shp`;
     readShapefile({ path }, (error, { next }) => {
       if (error) {
@@ -46,7 +46,7 @@ describe('read', () => {
 
   // geojson
 
-  it('should read geojson file', done => {
+  it('should read geojson file', (done) => {
     const path = `${__dirname}/./fixtures/points.geojson`;
     readGeoJSON({ path }, (error, { finished, feature, next }) => {
       if (error) {
@@ -63,7 +63,7 @@ describe('read', () => {
     });
   });
 
-  it('should handle no file error when read geojson file', done => {
+  it('should handle no file error when read geojson file', (done) => {
     const path = './fixtures/points.geojson';
     readGeoJSON({ path }, (error, { finished, feature, next }) => {
       expect(error).to.exist;
@@ -74,7 +74,7 @@ describe('read', () => {
     });
   });
 
-  it('should handle process error when read geojson file', done => {
+  it('should handle process error when read geojson file', (done) => {
     const path = `${__dirname}/./fixtures/points.geojson`;
     readGeoJSON({ path }, (error, { next }) => {
       if (error) {
@@ -87,7 +87,7 @@ describe('read', () => {
   });
 
   // csv
-  it('should read csv file', done => {
+  it('should read csv file', (done) => {
     const path = `${__dirname}/./fixtures/points.csv`;
     readCsv({ path }, (error, { finished, feature, next }) => {
       if (error) {
@@ -104,7 +104,7 @@ describe('read', () => {
     });
   });
 
-  it('should handle no file error when read csv file', done => {
+  it('should handle no file error when read csv file', (done) => {
     const path = './fixtures/points.csv';
     readCsv({ path }, (error, { finished, feature, next }) => {
       expect(error).to.exist;
@@ -115,7 +115,7 @@ describe('read', () => {
     });
   });
 
-  it('should handle process error when read csv file', done => {
+  it('should handle process error when read csv file', (done) => {
     const path = `${__dirname}/./fixtures/points.csv`;
     readCsv({ path }, (error, { next }) => {
       if (error) {
@@ -129,7 +129,7 @@ describe('read', () => {
 
   // json
 
-  it('should read json file', done => {
+  it('should read json file', (done) => {
     const path = `${__dirname}/./fixtures/points.json`;
     readJson({ path }, (error, data) => {
       expect(error).to.not.exist;
@@ -138,7 +138,7 @@ describe('read', () => {
     });
   });
 
-  it('should handle no file error when read json file', done => {
+  it('should handle no file error when read json file', (done) => {
     const path = './fixtures/points.json';
     readJson({ path }, (error, data) => {
       expect(error).to.exist;
@@ -147,7 +147,7 @@ describe('read', () => {
     });
   });
 
-  it('should not throw error when safe read json file', done => {
+  it('should not throw error when safe read json file', (done) => {
     const path = './fixtures/points.json';
     const throws = false;
     readJson({ path, throws }, (error, data) => {

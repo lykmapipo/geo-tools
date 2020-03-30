@@ -27,7 +27,7 @@ import {
  * // => { type: 'Point', coordinates: [ ... ] }
  *
  */
-export const centroidOf = geojson => {
+export const centroidOf = (geojson) => {
   try {
     let centroid = toCentroid(geojson);
     if (centroid && centroid.geometry) {
@@ -83,7 +83,7 @@ export const parseCoordinateString = (coords = '', optns) => {
     const pairs = compact(split(coords, separator)); // [pair]
 
     // map to points
-    const points = map(pairs, pair => {
+    const points = map(pairs, (pair) => {
       return map(split(pair, deliminator), toNumber);
     }); // [[point]]
 
