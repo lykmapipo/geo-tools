@@ -1,5 +1,5 @@
 import { getNumber, getNumbers } from '@lykmapipo/env';
-import { isFunction, map, compact, split, toNumber, size, first, nth, forEach, range, sample, sampleSize } from 'lodash';
+import { isEmpty, isFunction, map, compact, split, toNumber, size, first, nth, forEach, range, sample, sampleSize } from 'lodash';
 import { parallel } from 'async';
 import { normalizeError, assign, mergeObjects } from '@lykmapipo/common';
 import { valid, isPoint as isPoint$1, isMultiPoint as isMultiPoint$1, isLineString as isLineString$1, isMultiLineString as isMultiLineString$1, isPolygon as isPolygon$1, isMultiPolygon as isMultiPolygon$1, isGeometryCollection as isGeometryCollection$1, isFeature as isFeature$1, isFeatureCollection as isFeatureCollection$1, isPosition, isPolygonCoor } from 'geojson-validation';
@@ -44,7 +44,8 @@ const composeError = (errors = []) => {
   return error;
 };
 
-const withCallback = cb => (isValid, messages) => {
+const withCallback = (cb) => (messages) => {
+  const isValid = isEmpty(messages);
   if (isFunction(cb)) {
     return cb(composeError(messages), isValid);
   }
@@ -69,7 +70,8 @@ const withCallback = cb => (isValid, messages) => {
  * // => true
  */
 const isValid = (geojson, cb) => {
-  return valid(geojson, withCallback(cb));
+  const result = valid(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -90,7 +92,8 @@ const isValid = (geojson, cb) => {
  * // => true
  */
 const isPoint = (geojson, cb) => {
-  return isPoint$1(geojson, withCallback(cb));
+  const result = isPoint$1(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -111,7 +114,8 @@ const isPoint = (geojson, cb) => {
  * // => true
  */
 const isMultiPoint = (geojson, cb) => {
-  return isMultiPoint$1(geojson, withCallback(cb));
+  const result = isMultiPoint$1(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -132,7 +136,8 @@ const isMultiPoint = (geojson, cb) => {
  * // => true
  */
 const isLineString = (geojson, cb) => {
-  return isLineString$1(geojson, withCallback(cb));
+  const result = isLineString$1(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -153,7 +158,8 @@ const isLineString = (geojson, cb) => {
  * // => true
  */
 const isMultiLineString = (geojson, cb) => {
-  return isMultiLineString$1(geojson, withCallback(cb));
+  const result = isMultiLineString$1(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -174,7 +180,8 @@ const isMultiLineString = (geojson, cb) => {
  * // => true
  */
 const isPolygon = (geojson, cb) => {
-  return isPolygon$1(geojson, withCallback(cb));
+  const result = isPolygon$1(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -195,7 +202,8 @@ const isPolygon = (geojson, cb) => {
  * // => true
  */
 const isMultiPolygon = (geojson, cb) => {
-  return isMultiPolygon$1(geojson, withCallback(cb));
+  const result = isMultiPolygon$1(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -216,7 +224,8 @@ const isMultiPolygon = (geojson, cb) => {
  * // => true
  */
 const isGeometryCollection = (geojson, cb) => {
-  return isGeometryCollection$1(geojson, withCallback(cb));
+  const result = isGeometryCollection$1(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -237,7 +246,8 @@ const isGeometryCollection = (geojson, cb) => {
  * // => true
  */
 const isFeature = (geojson, cb) => {
-  return isFeature$1(geojson, withCallback(cb));
+  const result = isFeature$1(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -258,7 +268,8 @@ const isFeature = (geojson, cb) => {
  * // => true
  */
 const isFeatureCollection = (geojson, cb) => {
-  return isFeatureCollection$1(geojson, withCallback(cb));
+  const result = isFeatureCollection$1(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -292,11 +303,11 @@ const isGeometry = (geojson, cb) => {
         isMultiPolygon,
         isGeometryCollection,
       ],
-      validator => {
-        return next => validator(geojson, next);
+      (validator) => {
+        return (next) => validator(geojson, next);
       }
     );
-    return parallel(checkIfIsGeometry, withCallback(cb));
+    return parallel(checkIfIsGeometry, cb);
   }
   // sync
   return (
@@ -329,7 +340,7 @@ const isGeometry = (geojson, cb) => {
  * // => { type: 'Point', coordinates: [ ... ] }
  *
  */
-const centroidOf = geojson => {
+const centroidOf = (geojson) => {
   try {
     let centroid$1 = centroid(geojson);
     if (centroid$1 && centroid$1.geometry) {
@@ -385,7 +396,7 @@ const parseCoordinateString = (coords = '', optns) => {
     const pairs = compact(split(coords, separator)); // [pair]
 
     // map to points
-    const points = map(pairs, pair => {
+    const points = map(pairs, (pair) => {
       return map(split(pair, deliminator), toNumber);
     }); // [[point]]
 
@@ -821,7 +832,7 @@ const randomGeometryCollection = (optns = {}) => {
   // generate geometry
   const geometries = map(
     sampleSize(generators, options.vertices),
-    generateGeomentry => {
+    (generateGeomentry) => {
       return generateGeomentry(options);
     }
   );
@@ -870,7 +881,7 @@ const readShapefile = (optns, done) => {
   const readFeature = (source, processFeature) => {
     const onFeature = ({ done: finished, value: feature }) => {
       // try read next feature
-      const next = error => {
+      const next = (error) => {
         if (error) {
           return processFeature(error, mergeObjects(results));
         }
@@ -892,8 +903,8 @@ const readShapefile = (optns, done) => {
 
   // open & read shapefile
   open(path)
-    .then(source => readFeature(source, done)) // wire write & processing handler
-    .catch(error => done(error, mergeObjects(results))); // handle read error
+    .then((source) => readFeature(source, done)) // wire write & processing handler
+    .catch((error) => done(error, mergeObjects(results))); // handle read error
 
   // return;
 };
@@ -936,11 +947,11 @@ const readGeoJSON = (optns, done) => {
 
   // read geojson file
   const readStream = createReadStream(path);
-  readStream.on('error', error => done(error, mergeObjects(results)));
+  readStream.on('error', (error) => done(error, mergeObjects(results)));
 
   // wire GeoJSON parser
   const parseStream = readStream.pipe(parse());
-  parseStream.on('error', error => done(error, mergeObjects(results)));
+  parseStream.on('error', (error) => done(error, mergeObjects(results)));
 
   // wire write & processing stream handler
   const processStream = parseStream.pipe(
@@ -951,7 +962,7 @@ const readGeoJSON = (optns, done) => {
       objectMode: true,
     })
   );
-  processStream.on('error', error => done(error, mergeObjects(results)));
+  processStream.on('error', (error) => done(error, mergeObjects(results)));
   processStream.on('finish', () => done(null, mergeObjects(results)));
 
   // return;
@@ -997,11 +1008,11 @@ const readCsv = (optns, done) => {
 
   // read csv file
   const readStream = createReadStream(path);
-  readStream.on('error', error => done(error, mergeObjects(results)));
+  readStream.on('error', (error) => done(error, mergeObjects(results)));
 
   // wire csv parser
   const parseStream = readStream.pipe(parseCsv(options));
-  parseStream.on('error', error => done(error, mergeObjects(results)));
+  parseStream.on('error', (error) => done(error, mergeObjects(results)));
 
   // wire write & processing stream handler
   const processStream = parseStream.pipe(
@@ -1012,7 +1023,7 @@ const readCsv = (optns, done) => {
       objectMode: true,
     })
   );
-  processStream.on('error', error => done(error, mergeObjects(results)));
+  processStream.on('error', (error) => done(error, mergeObjects(results)));
   processStream.on('finish', () => done(null, mergeObjects(results)));
 
   // return;
