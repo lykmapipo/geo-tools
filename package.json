@@ -61,7 +61,7 @@
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
     "@commitlint/travis-cli": "^8.3.5",
-    "@lykmapipo/test-helpers": "^0.5.17",
+    "@lykmapipo/test-helpers": "^0.5.18",
     "chai": "^4.2.0",
     "commitizen": "^4.0.5",
     "coveralls": "^3.1.0",
@@ -87,8 +87,8 @@
     "shelljs": "^0.8.4"
   },
   "dependencies": {
-    "@lykmapipo/common": ">=0.33.0",
-    "@lykmapipo/env": ">=0.17.3",
+    "@lykmapipo/common": ">=0.33.1",
+    "@lykmapipo/env": ">=0.17.4",
     "@turf/turf": ">=5.1.6",
     "async": ">=3.2.0",
     "csv-parse": ">=4.9.0",
