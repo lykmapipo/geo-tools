@@ -1,3 +1,13 @@
+#### 0.7.0 (2020-05-01)
+
+##### Chores
+
+* **deps:**  force latest version & audit fix ([f510c6f4](https://github.com/lykmapipo/common/commit/f510c6f4554ccb10024648e9803e7705f34e15ba))
+
+##### Refactors
+
+*  use newer geojson-validation api ([70dc98a2](https://github.com/lykmapipo/common/commit/70dc98a2041897a9f820af3b55f75d7c3882ddde))
+
 #### 0.6.9 (2020-04-25)
 
 ##### Chores
