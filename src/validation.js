@@ -1,4 +1,4 @@
-import { isFunction, map } from 'lodash';
+import { isFunction, isEmpty, map } from 'lodash';
 import { parallel } from 'async';
 import { normalizeError, assign } from '@lykmapipo/common';
 import {
@@ -31,7 +31,8 @@ const composeError = (errors = []) => {
   return error;
 };
 
-const withCallback = (cb) => (isValid, messages) => {
+const withCallback = (cb) => (messages) => {
+  const isValid = isEmpty(messages);
   if (isFunction(cb)) {
     return cb(composeError(messages), isValid);
   }
@@ -56,7 +57,8 @@ const withCallback = (cb) => (isValid, messages) => {
  * // => true
  */
 export const isValid = (geojson, cb) => {
-  return checkIfIsValid(geojson, withCallback(cb));
+  const result = checkIfIsValid(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -77,7 +79,8 @@ export const isValid = (geojson, cb) => {
  * // => true
  */
 export const isPoint = (geojson, cb) => {
-  return checkIfIsPoint(geojson, withCallback(cb));
+  const result = checkIfIsPoint(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -98,7 +101,8 @@ export const isPoint = (geojson, cb) => {
  * // => true
  */
 export const isMultiPoint = (geojson, cb) => {
-  return checkIfIsMultiPoint(geojson, withCallback(cb));
+  const result = checkIfIsMultiPoint(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -119,7 +123,8 @@ export const isMultiPoint = (geojson, cb) => {
  * // => true
  */
 export const isLineString = (geojson, cb) => {
-  return checkIfIsLineString(geojson, withCallback(cb));
+  const result = checkIfIsLineString(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -140,7 +145,8 @@ export const isLineString = (geojson, cb) => {
  * // => true
  */
 export const isMultiLineString = (geojson, cb) => {
-  return checkIfIsMultiLineString(geojson, withCallback(cb));
+  const result = checkIfIsMultiLineString(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -161,7 +167,8 @@ export const isMultiLineString = (geojson, cb) => {
  * // => true
  */
 export const isPolygon = (geojson, cb) => {
-  return checkIfIsPolygon(geojson, withCallback(cb));
+  const result = checkIfIsPolygon(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -182,7 +189,8 @@ export const isPolygon = (geojson, cb) => {
  * // => true
  */
 export const isMultiPolygon = (geojson, cb) => {
-  return checkIfIsMultiPolygon(geojson, withCallback(cb));
+  const result = checkIfIsMultiPolygon(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -203,7 +211,8 @@ export const isMultiPolygon = (geojson, cb) => {
  * // => true
  */
 export const isGeometryCollection = (geojson, cb) => {
-  return checkIfIsGeometryCollection(geojson, withCallback(cb));
+  const result = checkIfIsGeometryCollection(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -224,7 +233,8 @@ export const isGeometryCollection = (geojson, cb) => {
  * // => true
  */
 export const isFeature = (geojson, cb) => {
-  return checkIfIsFeature(geojson, withCallback(cb));
+  const result = checkIfIsFeature(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -245,7 +255,8 @@ export const isFeature = (geojson, cb) => {
  * // => true
  */
 export const isFeatureCollection = (geojson, cb) => {
-  return checkIfIsFeatureCollection(geojson, withCallback(cb));
+  const result = checkIfIsFeatureCollection(geojson, true);
+  return withCallback(cb)(result);
 };
 
 /**
@@ -283,7 +294,7 @@ export const isGeometry = (geojson, cb) => {
         return (next) => validator(geojson, next);
       }
     );
-    return parallel(checkIfIsGeometry, withCallback(cb));
+    return parallel(checkIfIsGeometry, cb);
   }
   // sync
   return (
