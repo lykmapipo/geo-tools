@@ -25,7 +25,6 @@ import {
  *
  * const point = centroidOf(polygon);
  * // => { type: 'Point', coordinates: [ ... ] }
- *
  */
 export const centroidOf = (geojson) => {
   try {
@@ -71,7 +70,6 @@ export const centroidOf = (geojson) => {
  * const cicleString = '-9.2,39.5 180';
  * const polygon = parseCoordinateString(cirlceString);
  * // => { type: 'Polygon', coordinates: [ ... ] }
- *
  */
 export const parseCoordinateString = (coords = '', optns) => {
   // ensure options
