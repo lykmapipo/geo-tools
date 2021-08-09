@@ -1,8 +1,14 @@
 # geo-tools
 
 [![Build Status](https://travis-ci.org/lykmapipo/geo-tools.svg?branch=master)](https://travis-ci.org/lykmapipo/geo-tools)
-[![Dependencies Status](https://david-dm.org/lykmapipo/geo-tools.svg?style=flat-square)](https://david-dm.org/lykmapipo/geo-tools)
+[![Dependencies Status](https://david-dm.org/lykmapipo/geo-tools.svg)](https://david-dm.org/lykmapipo/geo-tools)
 [![Coverage Status](https://coveralls.io/repos/github/lykmapipo/geo-tools/badge.svg?branch=master)](https://coveralls.io/github/lykmapipo/geo-tools?branch=master)
+[![GitHub License](https://img.shields.io/github/license/lykmapipo/geo-tools)](https://github.com/lykmapipo/geo-tools/blob/master/LICENSE)
+
+[![Commitizen Friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![Code Style](https://badgen.net/badge/code%20style/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
+[![npm version](https://img.shields.io/npm/v/@lykmapipo/geo-tools)](https://www.npmjs.com/package/@lykmapipo/geo-tools)
 
 Opinionated geo utilities for day to day development
 
