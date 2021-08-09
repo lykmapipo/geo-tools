@@ -1,3 +1,14 @@
+#### 0.7.26 (2021-08-09)
+
+##### Chores
+
+* **deps:**  force latest version & audit fix ([d21f8854](https://github.com/lykmapipo/common/commit/d21f88549af0e788166f436986d8b68759faf407))
+
+##### Documentation Changes
+
+* **readme:**  update status badges ([da1e4d62](https://github.com/lykmapipo/common/commit/da1e4d6203847ca58479fbed7fe8544ca62f575e))
+*  add security guide ([3d5d65e2](https://github.com/lykmapipo/common/commit/3d5d65e2e67db6542da0d5ba9cbcc708289ba425))
+
 #### 0.7.25 (2021-06-04)
 
 ##### Chores
