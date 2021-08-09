@@ -338,7 +338,6 @@ const isGeometry = (geojson, cb) => {
  *
  * const point = centroidOf(polygon);
  * // => { type: 'Point', coordinates: [ ... ] }
- *
  */
 const centroidOf = (geojson) => {
   try {
@@ -384,7 +383,6 @@ const centroidOf = (geojson) => {
  * const cicleString = '-9.2,39.5 180';
  * const polygon = parseCoordinateString(cirlceString);
  * // => { type: 'Polygon', coordinates: [ ... ] }
- *
  */
 const parseCoordinateString = (coords = '', optns) => {
   // ensure options
