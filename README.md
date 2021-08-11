@@ -1,6 +1,6 @@
 # geo-tools
 
-[![Build Status](https://travis-ci.org/lykmapipo/geo-tools.svg?branch=master)](https://travis-ci.org/lykmapipo/geo-tools)
+[![Build Status](https://travis-ci.com/lykmapipo/geo-tools.svg?branch=master)](https://travis-ci.com/lykmapipo/geo-tools)
 [![Dependencies Status](https://david-dm.org/lykmapipo/geo-tools.svg)](https://david-dm.org/lykmapipo/geo-tools)
 [![Coverage Status](https://coveralls.io/repos/github/lykmapipo/geo-tools/badge.svg?branch=master)](https://coveralls.io/github/lykmapipo/geo-tools?branch=master)
 [![GitHub License](https://img.shields.io/github/license/lykmapipo/geo-tools)](https://github.com/lykmapipo/geo-tools/blob/master/LICENSE)
